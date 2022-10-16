@@ -1,9 +1,15 @@
 [gd_scene load_steps=2 format=3 uid="uid://bmo8i25jowrtg"]
 
-[ext_resource type="PackedScene" uid="uid://5jy5qgx6hgy8" path="res://entities/player/player.tscn" id="1_4gg68"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_mpx1j"]
 
-[node name="Spaceship" type="CharacterBody2D"]
+[node name="Spaceship" type="CharacterBody3D"]
+axis_lock_linear_y = true
+axis_lock_angular_x = true
+axis_lock_angular_z = true
 
-[node name="Sprite2d" type="Sprite2D" parent="."]
+[node name="CsgBox3d" type="CSGBox3D" parent="."]
+size = Vector3(1, 1, 2)
 
-[node name="Player" parent="." instance=ExtResource("1_4gg68")]
+[node name="CollisionShape3d" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0)
+shape = SubResource("BoxShape3D_mpx1j")

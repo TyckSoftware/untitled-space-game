@@ -1,14 +1,16 @@
 [gd_scene load_steps=4 format=3 uid="uid://belr4teswnhmn"]
 
-[ext_resource type="PackedScene" uid="uid://bmo8i25jowrtg" path="res://entities/spaceship/spaceship.tscn" id="1_aujxs"]
-[ext_resource type="Script" path="res://entities/spaceship/Spaceship.cs" id="2_bijta"]
+[ext_resource type="PackedScene" uid="uid://dci0tcblrdlfi" path="res://entities/spaceship/spaceship.tscn" id="1_aujxs"]
+[ext_resource type="PackedScene" uid="uid://0jgy8lg6e1sj" path="res://entities/player/player.tscn" id="2_wg1ye"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vseue"]
 
 [node name="Level" type="Node3D"]
 
 [node name="Spaceship" parent="." instance=ExtResource("1_aujxs")]
-script = ExtResource("2_bijta")
+
+[node name="Player" parent="." instance=ExtResource("2_wg1ye")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.14982, 0)
 
 [node name="DirectionalLight3d" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 13.2242, 0)
@@ -16,7 +18,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 13.
 [node name="Walls" type="Node" parent="."]
 
 [node name="Wall" type="StaticBody3D" parent="Walls"]
-transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 1, -0.12023, 0, -5.94696)
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 1, -0.12023, 0.486792, -62.2376)
 
 [node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall"]
 
@@ -24,7 +26,7 @@ transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 1, -0.12023, 0, -5.94696)
 shape = SubResource("BoxShape3D_vseue")
 
 [node name="Wall2" type="StaticBody3D" parent="Walls"]
-transform = Transform3D(8.55428, 0, -0.517923, 0, 1, 0, 5.17922, 0, 0.855428, 25.0266, 0, -22.3382)
+transform = Transform3D(8.55428, 0, -0.517923, 0, 1, 0, 5.17922, 0, 0.855428, 52.9684, 0.486792, -52.7721)
 
 [node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall2"]
 
@@ -32,7 +34,7 @@ transform = Transform3D(8.55428, 0, -0.517923, 0, 1, 0, 5.17922, 0, 0.855428, 25
 shape = SubResource("BoxShape3D_vseue")
 
 [node name="Wall3" type="StaticBody3D" parent="Walls"]
-transform = Transform3D(8.55428, 0, -0.517923, 0, 1, 0, 5.17922, 0, 0.855428, -13.4075, 0, 17.759)
+transform = Transform3D(8.55428, 0, -0.517923, 0, 1, 0, 5.17922, 0, 0.855428, -29.0229, 0.486792, 62.585)
 
 [node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall3"]
 
@@ -40,7 +42,7 @@ transform = Transform3D(8.55428, 0, -0.517923, 0, 1, 0, 5.17922, 0, 0.855428, -1
 shape = SubResource("BoxShape3D_vseue")
 
 [node name="Wall4" type="StaticBody3D" parent="Walls"]
-transform = Transform3D(3.16692, 0, -0.948528, 0, 1, 0, 9.48528, 0, 0.316692, 18.9997, 0, 17.759)
+transform = Transform3D(3.16692, 0, -0.948528, 0, 1, 0, 9.48528, 0, 0.316692, 54.3196, 0.486792, 43.525)
 
 [node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall4"]
 
@@ -48,7 +50,7 @@ transform = Transform3D(3.16692, 0, -0.948528, 0, 1, 0, 9.48528, 0, 0.316692, 18
 shape = SubResource("BoxShape3D_vseue")
 
 [node name="Wall5" type="StaticBody3D" parent="Walls"]
-transform = Transform3D(-4.75947, 0, -0.879474, 0, 1, 0, 8.79474, 0, -0.475947, -14.0395, 0, -22.0461)
+transform = Transform3D(-4.75947, 0, -0.879474, 0, 1, 0, 8.79474, 0, -0.475947, -35.3074, 0.486792, -35.6683)
 
 [node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall5"]
 
@@ -56,7 +58,7 @@ transform = Transform3D(-4.75947, 0, -0.879474, 0, 1, 0, 8.79474, 0, -0.475947, 
 shape = SubResource("BoxShape3D_vseue")
 
 [node name="Wall6" type="StaticBody3D" parent="Walls"]
-transform = Transform3D(9.74102, 0, -0.226107, 0, 1, 0, 2.26107, 0, 0.974102, 7.34434, 0, -42.667)
+transform = Transform3D(9.74102, 0, -0.226107, 0, 1, 0, 2.26107, 0, 0.974102, 7.34434, 0.486792, -42.667)
 
 [node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall6"]
 
@@ -64,7 +66,7 @@ transform = Transform3D(9.74102, 0, -0.226107, 0, 1, 0, 2.26107, 0, 0.974102, 7.
 shape = SubResource("BoxShape3D_vseue")
 
 [node name="Wall7" type="StaticBody3D" parent="Walls"]
-transform = Transform3D(5.80774, 0, -0.814065, 0, 1, 0, 8.14065, 0, 0.580774, -37.919, 0, -0.507107)
+transform = Transform3D(5.80774, 0, -0.814065, 0, 1, 0, 8.14065, 0, 0.580774, -37.919, 0.486792, -0.507107)
 
 [node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall7"]
 
@@ -73,7 +75,7 @@ transform = Transform3D(1, 0, 1.86265e-09, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("BoxShape3D_vseue")
 
 [node name="Wall8" type="StaticBody3D" parent="Walls"]
-transform = Transform3D(-1.92145, 0, -0.981367, 0, 1, 0, 9.81366, 0, -0.192145, 43.6377, 0, -0.507107)
+transform = Transform3D(-1.92145, 0, -0.981367, 0, 1, 0, 9.81366, 0, -0.192145, 79.6334, 0.486792, -0.507107)
 
 [node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall8"]
 
@@ -81,7 +83,7 @@ transform = Transform3D(-1.92145, 0, -0.981367, 0, 1, 0, 9.81366, 0, -0.192145, 
 shape = SubResource("BoxShape3D_vseue")
 
 [node name="Wall9" type="StaticBody3D" parent="Walls"]
-transform = Transform3D(-3.53083, 0, -0.935592, 0, 1, 0, 9.35592, 0, -0.353083, -38.0539, 0, -38.3633)
+transform = Transform3D(-3.53083, 0, -0.935592, 0, 1, 0, 9.35592, 0, -0.353083, -38.0539, 0.486792, -38.3633)
 
 [node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall9"]
 
@@ -89,7 +91,7 @@ transform = Transform3D(-3.53083, 0, -0.935592, 0, 1, 0, 9.35592, 0, -0.353083, 
 shape = SubResource("BoxShape3D_vseue")
 
 [node name="Camera3d" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.441506, 0.897258, 0, -0.897258, 0.441506, 0, 10.257, 3.78)
+transform = Transform3D(1, 0, 0, 0, 0.441506, 0.897258, 0, -0.897258, 0.441506, 0, 24.578, 16.352)
 fov = 78.5504
 metadata/_edit_lock_ = true
 

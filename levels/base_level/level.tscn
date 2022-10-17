@@ -13,10 +13,11 @@ script = ExtResource("2_bijta")
 [node name="DirectionalLight3d" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 13.2242, 0)
 
-[node name="Walls" type="Node" parent="."]
+[node name="Walls" type="Node3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 
 [node name="Wall" type="StaticBody3D" parent="Walls"]
-transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 1, -0.12023, 0, -5.94696)
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 1, 25.0636, 0, -5.94696)
 
 [node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall"]
 
@@ -32,7 +33,7 @@ transform = Transform3D(8.55428, 0, -0.517923, 0, 1, 0, 5.17922, 0, 0.855428, 25
 shape = SubResource("BoxShape3D_vseue")
 
 [node name="Wall3" type="StaticBody3D" parent="Walls"]
-transform = Transform3D(8.55428, 0, -0.517923, 0, 1, 0, 5.17922, 0, 0.855428, -13.4075, 0, 17.759)
+transform = Transform3D(8.66026, 0, -0.5, 0, 1, 0, 5, 0, 0.866026, -13.4075, 0, 17.759)
 
 [node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall3"]
 
@@ -89,27 +90,6 @@ transform = Transform3D(-3.53083, 0, -0.935592, 0, 1, 0, 9.35592, 0, -0.353083, 
 shape = SubResource("BoxShape3D_vseue")
 
 [node name="Camera3d" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.441506, 0.897258, 0, -0.897258, 0.441506, 0, 10.257, 3.78)
+transform = Transform3D(1, 0, 0, 0, 0.441506, 0.897258, 0, -0.897258, 0.441506, 0, 73.727, 33.377)
 fov = 78.5504
 metadata/_edit_lock_ = true
-
-[node name="MarginContainer" type="MarginContainer" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="OptionButton" type="OptionButton" parent="MarginContainer"]
-layout_mode = 2
-offset_right = 158.0
-offset_bottom = 40.0
-item_count = 4
-selected = 0
-popup/item_0/text = "World relative"
-popup/item_0/id = 0
-popup/item_1/text = "Mouse relative"
-popup/item_1/id = 1
-popup/item_2/text = "Full mouse"
-popup/item_2/id = 2
-popup/item_3/text = "Full keyboard"
-popup/item_3/id = 3
-
-[connection signal="item_selected" from="MarginContainer/OptionButton" to="Spaceship" method="_on_option_button_item_selected"]

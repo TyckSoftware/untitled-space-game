@@ -8,8 +8,8 @@ axis_lock_angular_x = true
 axis_lock_angular_z = true
 
 [node name="CsgBox3d" type="CSGBox3D" parent="."]
-size = Vector3(1, 1, 2)
+size = Vector3(10, 10, 20)
 
 [node name="CollisionShape3d" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0)
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 20, 0, 0, 0)
 shape = SubResource("BoxShape3D_mpx1j")

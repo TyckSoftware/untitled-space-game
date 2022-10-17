@@ -1,7 +1,34 @@
-[gd_scene load_steps=2 format=3 uid="uid://belr4teswnhmn"]
+[gd_scene load_steps=6 format=3 uid="uid://belr4teswnhmn"]
 
-[ext_resource type="PackedScene" uid="uid://bmo8i25jowrtg" path="res://entities/spaceship/spaceship.tscn" id="1_aujxs"]
+[ext_resource type="Script" path="res://entities/star/Star.cs" id="1_8uyk8"]
+[ext_resource type="Texture2D" uid="uid://c106h50xn5a8g" path="res://entities/star/circle.png" id="2_e7bb6"]
+[ext_resource type="Script" path="res://entities/planet/Planet.cs" id="3_mh45n"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kvemt"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_e8jrr"]
 
 [node name="Level" type="Node2D"]
 
-[node name="Spaceship" parent="." instance=ExtResource("1_aujxs")]
+[node name="Star" type="StaticBody2D" parent="."]
+script = ExtResource("1_8uyk8")
+
+[node name="CollisionShape2d" type="CollisionShape2D" parent="Star"]
+shape = SubResource("CircleShape2D_kvemt")
+
+[node name="StarSprite" type="Sprite2D" parent="Star"]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_e7bb6")
+
+[node name="Planets" type="Node2D" parent="Star"]
+
+[node name="Planet" type="StaticBody2D" parent="Star/Planets"]
+position = Vector2(74, 0)
+script = ExtResource("3_mh45n")
+
+[node name="PlanetSprite" type="Sprite2D" parent="Star/Planets/Planet"]
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("2_e7bb6")
+
+[node name="CollisionShape2d" type="CollisionShape2D" parent="Star/Planets/Planet"]
+shape = SubResource("CircleShape2D_e8jrr")

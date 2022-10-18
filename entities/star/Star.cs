@@ -1,17 +1,19 @@
 using Godot;
 using System;
 
-public partial class Star : StaticBody2D
+public partial class Star : StaticBody3D
 {	
 	
-	public int radius = 25;
-	public int mass;
+	public float radius;
+	public float mass;
 	public float density;
 
 	public override void _Ready()
 	{
+		radius = GetNode<CSGSphere3D>("Sphere").Radius;
+
 		density = 1;
-		mass = (int)density * radius * radius * radius;
+		mass = density * radius * radius * radius;
 	}
 	
 	public override void _Process(double delta)

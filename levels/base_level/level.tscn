@@ -1,38 +1,36 @@
-[gd_scene load_steps=6 format=3 uid="uid://belr4teswnhmn"]
+[gd_scene load_steps=5 format=3 uid="uid://belr4teswnhmn"]
 
 [ext_resource type="Script" path="res://entities/star/Star.cs" id="1_8uyk8"]
-[ext_resource type="Texture2D" uid="uid://c106h50xn5a8g" path="res://entities/star/circle.png" id="2_e7bb6"]
 [ext_resource type="Script" path="res://entities/planet/Planet.cs" id="3_mh45n"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_kvemt"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_q3ptq"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_e8jrr"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_4oxuo"]
 
-[node name="Level" type="Node2D"]
+[node name="Level" type="Node3D"]
 
-[node name="Star" type="StaticBody2D" parent="."]
+[node name="Star" type="StaticBody3D" parent="."]
 script = ExtResource("1_8uyk8")
 
-[node name="CollisionShape2d" type="CollisionShape2D" parent="Star"]
-shape = SubResource("CircleShape2D_kvemt")
+[node name="CollisionShape" type="CollisionShape3D" parent="Star"]
+shape = SubResource("SphereShape3D_q3ptq")
 
-[node name="StarSprite" type="Sprite2D" parent="Star"]
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("2_e7bb6")
+[node name="Sphere" type="CSGSphere3D" parent="Star"]
+radius = 40.0
 
-[node name="Camera2d" type="Camera2D" parent="."]
-current = true
+[node name="Planets" type="Node3D" parent="."]
 
-[node name="Planets" type="Node2D" parent="."]
-
-[node name="Planet" type="StaticBody2D" parent="Planets" node_paths=PackedStringArray("star")]
-position = Vector2(100, 0)
+[node name="Planet" type="StaticBody3D" parent="Planets" node_paths=PackedStringArray("star")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 0)
 script = ExtResource("3_mh45n")
 star = NodePath("../../Star")
 
-[node name="PlanetSprite" type="Sprite2D" parent="Planets/Planet"]
-scale = Vector2(0.03, 0.03)
-texture = ExtResource("2_e7bb6")
+[node name="Sphere" type="CSGSphere3D" parent="Planets/Planet"]
+radius = 10.0
 
-[node name="CollisionShape2d" type="CollisionShape2D" parent="Planets/Planet"]
-shape = SubResource("CircleShape2D_e8jrr")
+[node name="CollisionShape" type="CollisionShape3D" parent="Planets/Planet"]
+shape = SubResource("SphereShape3D_4oxuo")
+
+[node name="Camera3d" type="Camera3D" parent="."]
+transform = Transform3D(0.999988, -0.00316363, 0.00361904, -0.00108868, 0.584267, 0.811561, -0.00468196, -0.811555, 0.584257, 0, 295.989, 410.969)
+current = true

@@ -20,15 +20,19 @@ shape = SubResource("CircleShape2D_kvemt")
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_e7bb6")
 
-[node name="Planets" type="Node2D" parent="Star"]
+[node name="Camera2d" type="Camera2D" parent="."]
+current = true
 
-[node name="Planet" type="StaticBody2D" parent="Star/Planets"]
-position = Vector2(74, 0)
+[node name="Planets" type="Node2D" parent="."]
+
+[node name="Planet" type="StaticBody2D" parent="Planets" node_paths=PackedStringArray("star")]
+position = Vector2(100, 0)
 script = ExtResource("3_mh45n")
+star = NodePath("../../Star")
 
-[node name="PlanetSprite" type="Sprite2D" parent="Star/Planets/Planet"]
+[node name="PlanetSprite" type="Sprite2D" parent="Planets/Planet"]
 scale = Vector2(0.03, 0.03)
 texture = ExtResource("2_e7bb6")
 
-[node name="CollisionShape2d" type="CollisionShape2D" parent="Star/Planets/Planet"]
+[node name="CollisionShape2d" type="CollisionShape2D" parent="Planets/Planet"]
 shape = SubResource("CircleShape2D_e8jrr")

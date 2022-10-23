@@ -89,7 +89,9 @@ transform = Transform3D(-3.53083, 0, -0.935592, 0, 1, 0, 9.35592, 0, -0.353083, 
 [node name="CollisionShape3d" type="CollisionShape3D" parent="Walls/Wall9"]
 shape = SubResource("BoxShape3D_vseue")
 
-[node name="Camera3d" type="Camera3D" parent="."]
+[node name="CameraRig" type="Node3D" parent="."]
+
+[node name="Camera3d" type="Camera3D" parent="CameraRig"]
 transform = Transform3D(1, 0, 0, 0, 0.441506, 0.897258, 0, -0.897258, 0.441506, 0, 73.727, 33.377)
 fov = 78.5504
 metadata/_edit_lock_ = true

@@ -1,10 +1,26 @@
 using Godot;
 
+/// <summary>
+/// Class containing methods and properties regarding
+/// movement and rotation of a spaceship.
+/// </summary>
 public partial class Spaceship : CharacterBody3D
 {
-    public const float MAX_SPEED = 50.0f;
+    /// <summary>
+    /// The maximum velocity that the spaceship
+    /// can reach.
+    /// </summary>
+    public const float MAX_VELOCITY = 50f;
+
+    /// <summary>
+    /// The force that the thruster applies.
+    /// </summary>
     public const float THRUSTER_FORCE = .5f;
-    private Vector3? _previousPosition;
+
+    /// <summary>
+    /// The direction that the spaceship is moving towards.
+    /// </summary>
+    private float _direction = 0f;
 
     /// <inheritdoc />
     public override void _PhysicsProcess(double delta)
@@ -14,13 +30,22 @@ public partial class Spaceship : CharacterBody3D
         DoCameraFollow();
     }
 
+    /// <summary>
+    /// Rotate the spaceship
+    /// </summary>
     private void DoRotate()
     {
         float input = Input.GetAxis("turn_left", "turn_right");
-        float steerValue = input * 2;
-        RotateY(Mathf.DegToRad(steerValue));
+        _direction = Mathf.Lerp(_direction, -input, .02f);
+        RotateY(Mathf.DegToRad(_direction));
     }
 
+    /// <summary>
+    /// Move the spaceship.
+    /// </summary>
+    /// <param name="delta">
+    /// The delta time.
+    /// </param>
     private void DoMove(float delta)
     {
         Vector2 inputDir = Input.GetVector("move_left", "move_right", "move_forward", "move_back");
@@ -29,7 +54,7 @@ public partial class Spaceship : CharacterBody3D
         // Apply input force.
         if (inputDir != Vector2.Zero)
         {
-            Velocity = Velocity.MoveToward(direction * MAX_SPEED, THRUSTER_FORCE);
+            Velocity = Velocity.MoveToward(direction * MAX_VELOCITY, THRUSTER_FORCE);
         }
 
         // Apply breaking force.
@@ -48,16 +73,12 @@ public partial class Spaceship : CharacterBody3D
         }
     }
 
+    /// <summary>
+    /// Move the camera to follow the spaceship.
+    /// </summary>
     private void DoCameraFollow()
     {
-        if (_previousPosition != null)
-        {
-            Vector3 difference = _previousPosition.Value - Position;
-            difference.y = 0;
-
-            GetViewport().GetCamera3d().GlobalTranslate(-difference);
-        }
-
-        _previousPosition = Position;
+        var cameraRig = GetViewport().GetCamera3d().GetParent<Node3D>();
+        cameraRig.GlobalPosition = Transform.origin;
     }
 }

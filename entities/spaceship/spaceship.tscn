@@ -1,9 +1,10 @@
-<<<<<<< HEAD
-[gd_scene load_steps=4 format=3 uid="uid://dci0tcblrdlfi"]
-
-[gd_scene load_steps=6 format=3 uid="uid://bmo8i25jowrtg"]
+[gd_scene load_steps=8 format=3 uid="uid://bmo8i25jowrtg"]
 
 [ext_resource type="Script" path="res://imports/trail_3d.gd" id="1_l7eoj"]
+[ext_resource type="Script" path="res://entities/spaceship/Spaceship.cs" id="1_t48yl"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ecx5r"]
+albedo_color = Color(0.113725, 0.376471, 0.52549, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mpx1j"]
 
@@ -27,12 +28,15 @@ continuous_cd = true
 max_contacts_reported = 1
 contact_monitor = true
 angular_damp = 5.0
+script = ExtResource("1_t48yl")
 
 [node name="CsgBox3d" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, 0, 0)
 size = Vector3(10, 10, 20)
+material = SubResource("StandardMaterial3D_ecx5r")
 
 [node name="CollisionShape3d" type="CollisionShape3D" parent="."]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 20, 0, 0, 0)
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0)
 shape = SubResource("BoxShape3D_mpx1j")
 
 [node name="MeshInstance3d" type="MeshInstance3D" parent="."]

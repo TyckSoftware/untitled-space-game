@@ -17,6 +17,7 @@ public partial class Spaceship : RigidBody3D
     /// </summary>
     public const float THRUSTER_FORCE = 20f;
 
+    /// <inheritdoc />
     public override void _IntegrateForces(PhysicsDirectBodyState3D state)
     {
         base._IntegrateForces(state);

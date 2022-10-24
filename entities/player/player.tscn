@@ -1,3 +1,13 @@
-[gd_scene format=3 uid="uid://5jy5qgx6hgy8"]
+[gd_scene load_steps=3 format=3 uid="uid://0jgy8lg6e1sj"]
 
-[node name="Player" type="CharacterBody2D"]
+[ext_resource type="Script" path="res://entities/player/Player.cs" id="1_876i8"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_d474o"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_876i8")
+
+[node name="CsgCylinder3d" type="CSGCylinder3D" parent="."]
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_d474o")

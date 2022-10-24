@@ -19,10 +19,14 @@ transparency = 1
 shading_mode = 0
 albedo_texture = SubResource("GradientTexture1D_i4t2e")
 
-[node name="Spaceship" type="CharacterBody3D"]
+[node name="Spaceship" type="RigidBody3D"]
 axis_lock_linear_y = true
 axis_lock_angular_x = true
 axis_lock_angular_z = true
+continuous_cd = true
+max_contacts_reported = 1
+contact_monitor = true
+angular_damp = 5.0
 
 [node name="CsgBox3d" type="CSGBox3D" parent="."]
 size = Vector3(10, 10, 20)

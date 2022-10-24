@@ -1,7 +1,97 @@
-[gd_scene load_steps=2 format=3 uid="uid://belr4teswnhmn"]
+[gd_scene load_steps=4 format=3 uid="uid://belr4teswnhmn"]
 
 [ext_resource type="PackedScene" uid="uid://bmo8i25jowrtg" path="res://entities/spaceship/spaceship.tscn" id="1_aujxs"]
+[ext_resource type="Script" path="res://entities/spaceship/Spaceship.cs" id="2_bijta"]
 
-[node name="Level" type="Node2D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_vseue"]
+
+[node name="Level" type="Node3D"]
 
 [node name="Spaceship" parent="." instance=ExtResource("1_aujxs")]
+script = ExtResource("2_bijta")
+
+[node name="DirectionalLight3d" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 13.2242, 0)
+
+[node name="Walls" type="Node3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+
+[node name="Wall" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 1, 25.0636, 0, -5.94696)
+
+[node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall"]
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Walls/Wall"]
+shape = SubResource("BoxShape3D_vseue")
+
+[node name="Wall2" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(8.55428, 0, -0.517923, 0, 1, 0, 5.17922, 0, 0.855428, 25.0266, 0, -22.3382)
+
+[node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall2"]
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Walls/Wall2"]
+shape = SubResource("BoxShape3D_vseue")
+
+[node name="Wall3" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(8.66026, 0, -0.5, 0, 1, 0, 5, 0, 0.866026, -13.4075, 0, 17.759)
+
+[node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall3"]
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Walls/Wall3"]
+shape = SubResource("BoxShape3D_vseue")
+
+[node name="Wall4" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(3.16692, 0, -0.948528, 0, 1, 0, 9.48528, 0, 0.316692, 18.9997, 0, 17.759)
+
+[node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall4"]
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Walls/Wall4"]
+shape = SubResource("BoxShape3D_vseue")
+
+[node name="Wall5" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(-4.75947, 0, -0.879474, 0, 1, 0, 8.79474, 0, -0.475947, -14.0395, 0, -22.0461)
+
+[node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall5"]
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Walls/Wall5"]
+shape = SubResource("BoxShape3D_vseue")
+
+[node name="Wall6" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(9.74102, 0, -0.226107, 0, 1, 0, 2.26107, 0, 0.974102, 7.34434, 0, -42.667)
+
+[node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall6"]
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Walls/Wall6"]
+shape = SubResource("BoxShape3D_vseue")
+
+[node name="Wall7" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(5.80774, 0, -0.814065, 0, 1, 0, 8.14065, 0, 0.580774, -37.919, 0, -0.507107)
+
+[node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall7"]
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Walls/Wall7"]
+transform = Transform3D(1, 0, 1.86265e-09, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_vseue")
+
+[node name="Wall8" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(-1.92145, 0, -0.981367, 0, 1, 0, 9.81366, 0, -0.192145, 43.6377, 0, -0.507107)
+
+[node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall8"]
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Walls/Wall8"]
+shape = SubResource("BoxShape3D_vseue")
+
+[node name="Wall9" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(-3.53083, 0, -0.935592, 0, 1, 0, 9.35592, 0, -0.353083, -38.0539, 0, -38.3633)
+
+[node name="CsgBox3d" type="CSGBox3D" parent="Walls/Wall9"]
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Walls/Wall9"]
+shape = SubResource("BoxShape3D_vseue")
+
+[node name="CameraRig" type="Node3D" parent="."]
+
+[node name="Camera3d" type="Camera3D" parent="CameraRig"]
+transform = Transform3D(1, 0, 0, 0, 0.441506, 0.897258, 0, -0.897258, 0.441506, 0, 73.727, 33.377)
+fov = 78.5504
+metadata/_edit_lock_ = true

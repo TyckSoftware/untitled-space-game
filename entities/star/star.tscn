@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://c730xw6nphqy0"]
+
+[ext_resource type="Script" path="res://entities/star/Star.cs" id="1_jwn4v"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_q3ptq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lbaud"]
+albedo_color = Color(0.909804, 0.121569, 0.117647, 1)
+
+[node name="Star" type="StaticBody3D"]
+script = ExtResource("1_jwn4v")
+
+[node name="CollisionShape" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_q3ptq")
+
+[node name="Sphere" type="CSGSphere3D" parent="."]
+material_override = SubResource("StandardMaterial3D_lbaud")
+radius = 40.0
+
+[node name="Planets" type="Node3D" parent="."]

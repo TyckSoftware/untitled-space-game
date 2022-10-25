@@ -1,83 +1,88 @@
 using Godot;
-using System;
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="Apoapsis"></param>
+/// <param name="Periapsis"></param>
+/// <param name="Longitude"></param>
+/// <param name="Argument"></param>
+/// <param name="Inclination"></param>
+public record PlanetParameters(int Apoapsis, int Periapsis, int Longitude, int Argument, int Inclination);
 
 public partial class Planet : StaticBody3D
 {
-	public float timeMultiplier = 10;
-	public float radius;
-	public float mass;
-	public float density;
-	public float meanAngularMotion;
-	public float semiMajorAxis;
-	public float semiMinorAxis;
-	[Export]
-	public Star star;
-	[Export]
-	public float apoapsis = 400;
-	[Export]
-	public float periapsis = 100;
-	[Export]
-	public float periapsisTime = 10;
-	[Export]
-	public float longitude = 45;
-	[Export]
-	public float periapsisArgument = 0;
-	[Export]
-	public float inclination = 0; 
-	private double _time = 0;
-	private float _eccentricity = 1;
+    public float Radius { get; set; }
+    public float Mass => Density * Radius * Radius * Radius;
+    public float Density { get; set; } = 1;
+	public float MeanAngularMotion { get; private set; }
+	public float SemiMajorAxis { get; private set; }
+	public float SemiMinorAxis { get; private set; }
+	public float Eccentricity { get; private set; }
+	public float PeriapsisTime { get; set; } = 10.0f;
+    public PlanetParameters Parameters { get; set; }
+    public Star Star { get; private set; }
+
+	public Planet()
+	{
+        Radius = 10;
+    }
+
+    public void Init(PlanetParameters parameters, Star star)
+	{
+        Parameters = parameters;
+        Star = star;
+    }
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_eccentricity = (apoapsis - periapsis) / (apoapsis + periapsis);
-		// _eccentricity = Mathf.Sqrt(1 - Mathf.Pow(semiMinorAxis, 2)/Mathf.Pow(semiMajorAxis, 2));
-        semiMajorAxis = 0.5f * (periapsis + apoapsis);
-        semiMinorAxis = semiMajorAxis * Mathf.Sqrt(1 - Mathf.Pow(_eccentricity, 2));
-		meanAngularMotion = Mathf.Sqrt(star.mass/Mathf.Pow(semiMajorAxis, 3));
-
-		radius = GetNode<CSGSphere3D>("Sphere").Radius;
-
-		density = 1;
-		mass = density * radius * radius * radius;
+		// Orbital parameters
+		Eccentricity = (Parameters.Apoapsis - Parameters.Periapsis) / (Parameters.Apoapsis + Parameters.Periapsis);
+        SemiMajorAxis = 0.5f * (Parameters.Periapsis + Parameters.Apoapsis);
+        SemiMinorAxis = SemiMajorAxis * Mathf.Sqrt(1 - Mathf.Pow(Eccentricity, 2));
+        MeanAngularMotion = Mathf.Sqrt(Star.Mass/Mathf.Pow(SemiMajorAxis, 3));
 	}
 	
 	public override void _PhysicsProcess(double delta)
-	{	
-		_time += timeMultiplier * delta;
-
-		Position = OrbitalPosition((float)_time);
-	}
-	
-	private Vector3 OrbitalPosition(float time)
 	{
-		float anomaly = EccentricAnomaly(time);
+        Position = GetOrbitalPosition((float)LevelManager.Time);
+	}
 
-		Vector3 position = new Vector3(
-			semiMajorAxis * (Mathf.Cos(anomaly) - _eccentricity), 
+	/// <summary>
+    /// Method <c>OrbitalPosition</c> computes the position of the planet at time <c>time</c> according to Kepler's laws.
+	/// See https://en.wikipedia.org/wiki/Kepler%27s_equation <seeal>
+    /// </summary>
+	private Vector3 GetOrbitalPosition(float time)
+	{
+		float anomaly = GetEccentricAnomaly(time);
+		
+        Vector3 position = new Vector3(
+			SemiMajorAxis * (Mathf.Cos(anomaly) - Eccentricity), 
 			0,
-			semiMinorAxis * Mathf.Sin(anomaly)
+			SemiMinorAxis * Mathf.Sin(anomaly)
 		);
 
-		Vector3 rotatedPosition = position.Rotated(Vector3.Up, Mathf.DegToRad(periapsisArgument));
+		Vector3 rotatedPosition = position.Rotated(Vector3.Up, Mathf.DegToRad(Parameters.Argument));
 
-		rotatedPosition = rotatedPosition.Rotated(Vector3.Right, Mathf.DegToRad(inclination));
-		rotatedPosition = rotatedPosition.Rotated(Vector3.Up, Mathf.DegToRad(longitude));
+		rotatedPosition = rotatedPosition.Rotated(Vector3.Right, Mathf.DegToRad(Parameters.Inclination));
+		rotatedPosition = rotatedPosition.Rotated(Vector3.Up, Mathf.DegToRad(Parameters.Longitude));
 
 		return rotatedPosition;
 	}
 
-	private float EccentricAnomaly(float time, int maxIterations = 20, float rTol = 1E-7f)
+	private float GetEccentricAnomaly(float time, int maxIterations = 20, float rTol = 1E-7f)
 	{	
 		// The mean anomaly
-		float meanAnomaly = (time - periapsisTime) * meanAngularMotion;
-		// Initial guess for E
-		float E = _eccentricity > 0.8 ? Mathf.Pi : meanAnomaly;
+		float meanAnomaly = (time - PeriapsisTime) * MeanAngularMotion;
+
+        // Initial guess for E
+        float E = Eccentricity > 0.8 ? Mathf.Pi : meanAnomaly;
 
 		for (int i = 0; i < maxIterations; i++)
 		{
-			float numerator = _eccentricity * Mathf.Sin(E) + meanAnomaly - E;
-			float denominator = _eccentricity * Mathf.Cos(E) - 1;
+			float numerator = Eccentricity * Mathf.Sin(E) + meanAnomaly - E;
+			float denominator = Eccentricity * Mathf.Cos(E) - 1;
 			
 			var newE = E - numerator / denominator;
 

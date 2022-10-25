@@ -1,36 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://belr4teswnhmn"]
+[gd_scene load_steps=2 format=3 uid="uid://belr4teswnhmn"]
 
-[ext_resource type="Script" path="res://entities/star/Star.cs" id="1_8uyk8"]
-[ext_resource type="Script" path="res://entities/planet/Planet.cs" id="3_mh45n"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_q3ptq"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_4oxuo"]
+[ext_resource type="PackedScene" uid="uid://c730xw6nphqy0" path="res://entities/star/star.tscn" id="1_wowe5"]
 
 [node name="Level" type="Node3D"]
 
-[node name="Star" type="StaticBody3D" parent="."]
-script = ExtResource("1_8uyk8")
+[node name="Star" parent="." instance=ExtResource("1_wowe5")]
 
-[node name="CollisionShape" type="CollisionShape3D" parent="Star"]
-shape = SubResource("SphereShape3D_q3ptq")
-
-[node name="Sphere" type="CSGSphere3D" parent="Star"]
-radius = 40.0
-
-[node name="Planets" type="Node3D" parent="."]
-
-[node name="Planet" type="StaticBody3D" parent="Planets" node_paths=PackedStringArray("star")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 0)
-script = ExtResource("3_mh45n")
-star = NodePath("../../Star")
-
-[node name="Sphere" type="CSGSphere3D" parent="Planets/Planet"]
-radius = 10.0
-
-[node name="CollisionShape" type="CollisionShape3D" parent="Planets/Planet"]
-shape = SubResource("SphereShape3D_4oxuo")
-
-[node name="Camera3d" type="Camera3D" parent="."]
-transform = Transform3D(0.999988, -0.00316363, 0.00361904, -0.00108868, 0.584267, 0.811561, -0.00468196, -0.811555, 0.584257, 0, 295.989, 410.969)
+[node name="TemporaryCamera" type="Camera3D" parent="."]
+transform = Transform3D(0.999988, -0.00316363, 0.00361904, 0.000641461, 0.833982, 0.551791, -0.00476388, -0.551782, 0.833975, 0, 291.025, 649.223)
 current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 98.3925, 0)

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://dcqk1ra0c766x"]
+
+[ext_resource type="Script" path="res://entities/spaceship/interactions/SpaceshipDriveInteraction.cs" id="1_ceti2"]
+
+[resource]
+script = ExtResource("1_ceti2")
+KeyAction = "spaceship_enter"
+ActionDisplayText = "enter the spaceship"

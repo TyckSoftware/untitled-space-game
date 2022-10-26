@@ -8,7 +8,7 @@
 script = ExtResource("1_p12b5")
 
 [node name="Sphere" type="CSGSphere3D" parent="."]
-radius = 10.0
+radius = 1.0
 
 [node name="CollisionShape" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_4oxuo")

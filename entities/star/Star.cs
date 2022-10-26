@@ -1,49 +1,91 @@
 using Godot;
 
+/// <summary>
+/// Class containing methods and properties pertaining to 
+/// spawning planets around a central star.
+/// </summary>
 public partial class Star : StaticBody3D
 {
-    public const int MIN_PLANETS = 2;
+    /// <summary>
+    /// Minimum number of planets orbiting around a star.
+    /// </summary>
+    public const int MIN_PLANETS = 1;
+    
+    /// <summary>
+    /// Maximum number of planets orbiting around a star.
+    /// </summary>
     public const int MAX_PLANETS = 10;
-    public const int MIN_RADIUS = 100;
+
+    /// <summary>
+    /// Minimum distance of planet to the star.
+    /// </summary>
+    public const int MIN_RADIUS = 200;
+
+    /// <summary>
+    /// Maximum distance of planet to the star.
+    /// </summary>
     public const int MAX_RADIUS = 500;
 
+    /// <summary>
+    /// Stellar radius.
+    /// </summary>
     public float Radius { get; set; }
+
+    /// <summary>
+    /// Stellar mass.
+    /// </summary>
     public float Mass => Density * Radius * Radius * Radius;
+
+    /// <summary>
+    /// Stellar density.
+    /// </summary>
     public float Density { get; set; } = 1;
 
+    /// <summary>
+    /// Number of planets orbitting around the star.
+    /// </summary>
     public int PlanetCount { get; private set; }
-    public PlanetParameters[] PlanetParams { get; set; }
 
-    private RandomNumberGenerator _rng = new RandomNumberGenerator();
-    private PackedScene _planetScene;
+    /// <summary>
+    /// Orbital parameters for each of the orbiting planets.
+    /// </summary>
+    public OrbitParameters[] OrbitParams { get; set; }
 
-	public Star()
+    /// <summary>
+    /// Random number generator instance.
+    /// </summary>
+    private RandomNumberGenerator Rand { get; set; } = new RandomNumberGenerator();
+
+    /// <summary>
+    /// Instance of the Planet scene.
+    /// </summary>
+    private PackedScene PlanetScene { get; set; }
+
+    public Star()
 	{
-        Radius = 40; // TODO: randomly generate radius...
+        // set-up random seed
+        Rand.Randomize();
+        Radius = Rand.RandiRange(40, 100);
     }
 
+    /// <inheritdoc />
     public override void _Ready()
 	{
-        // radius = GetNode<CSGSphere3D>("Sphere").Radius;
+        GetNode<CSGSphere3D>("Sphere").Radius = Radius;
 
-        _planetScene = ResourceLoader.Load("res://entities/planet/planet.tscn") as PackedScene;
+        PlanetScene = ResourceLoader.Load("res://entities/planet/planet.tscn") as PackedScene;
         
-        PlanetCount = _rng.RandiRange(MIN_PLANETS, MAX_PLANETS);
-        PlanetParams = new PlanetParameters[PlanetCount];
+        PlanetCount = Rand.RandiRange(MIN_PLANETS, MAX_PLANETS);
+        OrbitParams = new OrbitParameters[PlanetCount];
 
-        GD.Print($"Initialising {PlanetCount} planets...");
-
-        // Generate planets...
         GeneratePlanets();
-
-        // Spawn planets...
         SpawnPlanets();
     }
 	
-	public override void _Process(double delta)
-	{
-	}
-
+    /// <summary>
+    /// Generate a set of orbital parameters for each of the planets
+    /// orbitting around the star.
+    /// </summary>
     private void GeneratePlanets()
 	{
         int minRadius = MIN_RADIUS;
@@ -55,38 +97,41 @@ public partial class Star : StaticBody3D
 		{
             var planetParameters = GeneratePlanarParameters(minRadius, maxRadius);
 
-            PlanetParams[numGenerated] = planetParameters;
+            OrbitParams[numGenerated] = planetParameters;
             
             numGenerated++;
 
+            // Set a new min/max distance from the star to avoid planets colliding
             minRadius = maxRadius;
             maxRadius = (int)(1.5 * minRadius);
         }
 	}
 
-	private PlanetParameters GeneratePlanarParameters(int min, int max)
+    /// <summary>
+    /// Generate orbital parameters for a planet orbitting in a plane.
+    /// </summary>
+    /// <param name="minRadius">Minimum possible distance from the star</param>
+    /// <param name="maxRadius">Maximum possible distance from the star</param>
+    /// <returns></returns>
+	private OrbitParameters GeneratePlanarParameters(int minRadius, int maxRadius)
 	{
-        _rng.Randomize();
-        int periapsis = _rng.RandiRange((int)min/2, (int)max/2);
-        
-        _rng.Randomize();
-        int apoapsis = _rng.RandiRange(periapsis, max);
-        
-        _rng.Randomize();
-        int longitude = _rng.RandiRange(0, 359);
+        int periapsis = Rand.RandiRange((int)minRadius/2, (int)maxRadius/2);
+        int apoapsis = Rand.RandiRange(periapsis, maxRadius);
+        int longitude = Rand.RandiRange(0, 359);
 
-        var parameters = new PlanetParameters(apoapsis, periapsis, longitude, 0, 0);
+        var parameters = new OrbitParameters(apoapsis, periapsis, longitude, 0, 0);
 
         return parameters;
     }
 
+    /// <summary>
+    /// Add all the planets to the level.
+    /// </summary>
 	private void SpawnPlanets()
 	{
-		foreach (var parameters in PlanetParams)
+		foreach (var parameters in OrbitParams)
 		{
-            GD.Print(parameters.ToString());
-
-            var planetInstance = _planetScene.Instantiate() as Planet;
+            var planetInstance = PlanetScene.Instantiate() as Planet;
 
             planetInstance.Init(parameters, this);
             AddChild(planetInstance);

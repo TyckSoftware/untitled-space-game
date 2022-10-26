@@ -15,6 +15,6 @@ shape = SubResource("SphereShape3D_q3ptq")
 
 [node name="Sphere" type="CSGSphere3D" parent="."]
 material_override = SubResource("StandardMaterial3D_lbaud")
-radius = 40.0
+radius = 1.0
 
 [node name="Planets" type="Node3D" parent="."]

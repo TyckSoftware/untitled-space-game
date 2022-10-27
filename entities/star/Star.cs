@@ -49,7 +49,7 @@ public partial class Star : StaticBody3D
     /// <summary>
     /// Orbital parameters for each of the orbiting planets.
     /// </summary>
-    public OrbitParameters[] OrbitParams { get; set; }
+    public OrbitParameters[] OrbitParams { get; set; } = default!;
 
     /// <summary>
     /// Random number generator instance.
@@ -59,12 +59,13 @@ public partial class Star : StaticBody3D
     /// <summary>
     /// Instance of the Planet scene.
     /// </summary>
-    private PackedScene PlanetScene { get; set; }
+    private PackedScene PlanetScene { get; set; } = default!;
 
     public Star()
 	{
-        // set-up random seed
+        // set-up random seed.
         Rand.Randomize();
+        
         Radius = Rand.RandiRange(40, 100);
     }
 
@@ -101,18 +102,24 @@ public partial class Star : StaticBody3D
             
             numGenerated++;
 
-            // Set a new min/max distance from the star to avoid planets colliding
+            // Set a new min/max distance from the star to avoid planets colliding.
             minRadius = maxRadius;
             maxRadius = (int)(1.5 * minRadius);
         }
 	}
 
     /// <summary>
-    /// Generate orbital parameters for a planet orbitting in a plane.
+    /// Randomly generate orbital parameters for a planet orbitting in a plane.
     /// </summary>
-    /// <param name="minRadius">Minimum possible distance from the star</param>
-    /// <param name="maxRadius">Maximum possible distance from the star</param>
-    /// <returns></returns>
+    /// <param name="minRadius">
+    /// Minimum possible distance from the star.
+    /// </param>
+    /// <param name="maxRadius">
+    /// Maximum possible distance from the star.
+    /// </param>
+    /// <returns>
+    /// Orbital parameters for a partical planet.
+    /// </returns>
 	private OrbitParameters GeneratePlanarParameters(int minRadius, int maxRadius)
 	{
         int periapsis = Rand.RandiRange((int)minRadius/2, (int)maxRadius/2);

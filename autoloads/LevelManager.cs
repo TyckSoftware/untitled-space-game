@@ -5,20 +5,19 @@ using Godot;
 /// </summary>
 public partial class LevelManager : Node
 {
-
     /// <summary>
-    /// Value by which the time increases ever frame.
+    /// Multiplication factor altering the rate at which time passes.
     /// </summary>
-    public static float TimeIncrement { get; set; } = 0.05f;
+    public static float TimeIncrementFactor { get; set; } = 2.0f;
 
     /// <summary>
-    /// Time spend in a level.
+    /// Time spent in a level.
     /// </summary>
     public static float Time { get; private set; } = 0.0f;
 
     /// <inheritdoc />
-	public override void _Process(double delta)
-	{
-        Time += TimeIncrement;
+    public override void _PhysicsProcess(double delta)
+    {
+        Time += TimeIncrementFactor * (float)delta;
     }
 }

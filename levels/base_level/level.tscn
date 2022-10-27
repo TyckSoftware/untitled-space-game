@@ -9,9 +9,9 @@
 [node name="Level" type="Node3D"]
 
 [node name="Star" parent="." instance=ExtResource("1_wowe5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 100)
 
 [node name="Spaceship" parent="." instance=ExtResource("1_aujxs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, 0)
 
 [node name="Player" parent="Spaceship" instance=ExtResource("2_wg1ye")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)

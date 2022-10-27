@@ -6,14 +6,19 @@ using Godot;
 public partial class LevelManager : Node
 {
 
-	/// <summary>
+    /// <summary>
+    /// Value by which the time increases ever frame.
+    /// </summary>
+    public static float TimeIncrement { get; set; } = 0.05f;
+
+    /// <summary>
     /// Time spend in a level.
     /// </summary>
-    public static int Time { get; private set; }
+    public static float Time { get; private set; } = 0.0f;
 
     /// <inheritdoc />
 	public override void _Process(double delta)
 	{
-        Time += 1;
+        Time += TimeIncrement;
     }
 }

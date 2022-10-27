@@ -98,7 +98,7 @@ public partial class Planet : StaticBody3D
 	/// <inheritdoc />
 	public override void _PhysicsProcess(double delta)
 	{
-        Position = GetOrbitalPosition((float)LevelManager.Time);
+        Position = GetOrbitalPosition(LevelManager.Time);
 	}
 
 	/// <summary>

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://belr4teswnhmn"]
+[gd_scene load_steps=8 format=3 uid="uid://belr4teswnhmn"]
 
 [ext_resource type="PackedScene" uid="uid://bmo8i25jowrtg" path="res://entities/spaceship/spaceship.tscn" id="1_aujxs"]
 [ext_resource type="PackedScene" uid="uid://c730xw6nphqy0" path="res://entities/star/star.tscn" id="1_wowe5"]
@@ -18,10 +18,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 100)
 
 [node name="Player" parent="Spaceship" instance=ExtResource("2_wg1ye")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+motion_mode = 1
 
-[node name="InteractableArea" parent="Spaceship" node_paths=PackedStringArray("InteractableUIContainer") instance=ExtResource("3_mfjsb")]
+[node name="InteractableArea" parent="Spaceship" node_paths=PackedStringArray("InteractionHintsUIContainer") instance=ExtResource("3_mfjsb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -5.36017)
-InteractableUIContainer = NodePath("../../UserInterface/InteractableNotificationsContainer")
+InteractionHintsUIContainer = NodePath("../../UserInterface/InteractionHintsContainer")
 Interactions = [ExtResource("4_x4gjs"), ExtResource("5_75xhl")]
 
 [node name="DirectionalLight3d" type="DirectionalLight3D" parent="."]
@@ -118,7 +119,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="InteractableNotificationsContainer" type="VBoxContainer" parent="UserInterface"]
+[node name="InteractionHintsContainer" type="VBoxContainer" parent="UserInterface"]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0

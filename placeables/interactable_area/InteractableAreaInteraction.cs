@@ -20,19 +20,13 @@ public partial class InteractableAreaInteraction : Resource
     public string ActionDisplayText { get; set; } = "";
 
     /// <summary>
-    /// 
+    /// Performs the interaction.
     /// </summary>
-    /// <returns></returns>
-    public bool IsTriggered()
-    {
-        return Input.IsActionJustPressed(KeyAction);
-    }
-
-    /// <summary>
+    /// <remarks>
     /// Resources cannot be abstract, hence this method
     /// has an empty body.
-    /// </summary>
-    public virtual void OnInteracted()
+    /// </remarks>
+    public virtual void Perform()
     {
         return;
     }

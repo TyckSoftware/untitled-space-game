@@ -17,12 +17,19 @@ public partial class InputManager : Node
     public InputEvent? LatestInputEvent { get; private set; }
 
     /// <summary>
-    /// 
+    /// Event handler that is fired whenever the
+    /// input device is changed.
     /// </summary>
-    /// <param name="inputEvent"></param>
+    /// <param name="inputEvent">
+    /// The input event that was made on the new device.
+    /// </param>
     [Signal]
     public delegate void InputDeviceChangedEventHandler(InputEvent inputEvent);
 
+    /// <summary>
+    /// The collection of input event types that belong
+    /// to the keyboard.
+    /// </summary>
     private Type[] KeyboardInputEventTypes { get; set; } = new[]
     {
         typeof(InputEventKey),
@@ -30,6 +37,10 @@ public partial class InputManager : Node
         typeof(InputEventMouseMotion),
     };
 
+    /// <summary>
+    /// The collection of input event types that belong
+    /// to the controller.
+    /// </summary>
     private Type[] ControllerInputEventTypes { get; set; } = new[]
     {
         typeof(InputEventJoypadButton),

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>
-/// An area that can hold various interactions
+/// An area that can hold a collection of
+/// <see cref="InteractableAreaInteraction" /> resources
 /// that will be displayed in the UI upon entering.
 /// </summary>
 public partial class InteractableArea : Area3D
@@ -36,7 +37,7 @@ public partial class InteractableArea : Area3D
     private InputManager InputManager { get; set; } = default!;
 
     /// <summary>
-    /// 
+    /// Whether the player is currently in the area.
     /// </summary>
     private bool IsPlayerInArea { get; set; }
 
@@ -47,28 +48,33 @@ public partial class InteractableArea : Area3D
             inputEvent => OnInputDeviceChanged(inputEvent);
     }
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
+    /// <summary>
+    /// Event that is fired by Godot whenever
+    /// any key is pressed.
+    /// </summary>
+    /// <param name="inputEvent">
+    /// The input event that was made.
+    /// </param>
+    public void _input(InputEvent inputEvent)
     {
-        foreach (InteractableAreaInteraction interaction in Interactions)
+        if (IsPlayerInArea)
         {
-            if (interaction.IsTriggered())
+            foreach (InteractableAreaInteraction interaction in Interactions)
             {
-                interaction.OnInteracted();
+                if (Input.IsActionJustPressed(interaction.KeyAction))
+                {
+                    interaction.Perform();
+                }
             }
         }
     }
 
     /// <summary>
-    /// Event that is fired by Godot whenever
-    /// any key is pressed.
+    /// Method that is fired by the
+    /// <see cref="InputManager.InputDeviceChangedEventHandler"/>
+    /// whenever the input device is changed.
     /// </summary>
     /// <param name="inputEvent"></param>
-    public void _input(InputEvent inputEvent)
-    {
-        // GD.Print("input");
-    }
-
     private void OnInputDeviceChanged(InputEvent inputEvent)
     {
         if (IsPlayerInArea)
@@ -78,6 +84,13 @@ public partial class InteractableArea : Area3D
         }
     }
 
+    /// <summary>
+    /// Method that is fired by Godot whenever
+    /// a Node3D enters the area.
+    /// </summary>
+    /// <param name="body">
+    /// The Node3D that entered the area.
+    /// </param>
     public void OnInteractableAreaBodyEntered(Node3D body)
     {
         if (body is Player)
@@ -87,6 +100,13 @@ public partial class InteractableArea : Area3D
         }
     }
 
+    /// <summary>
+    /// Method that is fired by Godot whenever
+    /// a Node3D exits the area.
+    /// </summary>
+    /// <param name="body">
+    /// The Node3D that exited the area.
+    /// </param>
     public void OnInteractableAreaBodyExited(Node3D body)
     {
         if (body is Player)

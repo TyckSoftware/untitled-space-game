@@ -1,6 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://belr4teswnhmn"]
 
 [ext_resource type="PackedScene" uid="uid://bmo8i25jowrtg" path="res://entities/spaceship/spaceship.tscn" id="1_aujxs"]
+[ext_resource type="PackedScene" uid="uid://c730xw6nphqy0" path="res://entities/star/star.tscn" id="1_wowe5"]
 [ext_resource type="PackedScene" uid="uid://0jgy8lg6e1sj" path="res://entities/player/player.tscn" id="2_wg1ye"]
 [ext_resource type="PackedScene" uid="uid://d2x8rwpfc3k0s" path="res://placeables/interactable_area/interactable_area.tscn" id="3_mfjsb"]
 [ext_resource type="Resource" uid="uid://vt3k4wnnw20e" path="res://placeables/interactable_area/interactable_area_interaction.tres" id="4_x4gjs"]
@@ -9,6 +10,9 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_vseue"]
 
 [node name="Level" type="Node3D"]
+
+[node name="Star" parent="." instance=ExtResource("1_wowe5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 100)
 
 [node name="Spaceship" parent="." instance=ExtResource("1_aujxs")]
 

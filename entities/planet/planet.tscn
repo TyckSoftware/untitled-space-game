@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://bocw3khkm83lw"]
+
+[ext_resource type="Script" path="res://entities/planet/Planet.cs" id="1_p12b5"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_4oxuo"]
+
+[node name="Planet" type="StaticBody3D"]
+script = ExtResource("1_p12b5")
+
+[node name="Sphere" type="CSGSphere3D" parent="."]
+radius = 1.0
+
+[node name="CollisionShape" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_4oxuo")

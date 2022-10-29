@@ -28,6 +28,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 InputManager="*res://autoloads/InputManager.cs"
+LevelManager="*res://autoloads/LevelManager.cs"
 
 [dotnet]
 

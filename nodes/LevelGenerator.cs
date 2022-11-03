@@ -10,7 +10,7 @@ public partial class LevelGenerator : Node
 
     /// <inheritdoc />
     public override void _Ready()
-	{
+    {
         // Setting up points of interest
         int pointCount = 64;
 
@@ -61,12 +61,12 @@ public partial class LevelGenerator : Node
             for (int i = 0; i < numGenerated; i++)
             {
                 var p = points[i];
-                bool isOverlapping = point.SquaredDistanceTo(p) < point.SizeSquared + p.SizeSquared;
+                bool isOverlapping = point.IsOverlappingWith(p);
 
                 bool isInsideDeadzone = false;
 
                 if (p.Type.Id == point.Type.Id)
-                    isInsideDeadzone = point.SquaredDistanceTo(p) < point.DeadzoneSquared + p.DeadzoneSquared;
+                    isInsideDeadzone = point.IsInsideDeadzoneOf(p);
 
                 if (isOverlapping || isInsideDeadzone)
                 {

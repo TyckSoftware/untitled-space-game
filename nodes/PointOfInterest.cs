@@ -30,4 +30,14 @@ public class PointOfInterest
     {
         return Mathf.Pow(DistanceTo(point), 2);
     }
+
+    public bool IsOverlappingWith(PointOfInterest point)
+    {
+        return SquaredDistanceTo(point) < SizeSquared + point.SizeSquared;
+    }
+
+    public bool IsInsideDeadzoneOf(PointOfInterest point)
+    {
+        return SquaredDistanceTo(point) < DeadzoneSquared + point.DeadzoneSquared;
+    }
 }

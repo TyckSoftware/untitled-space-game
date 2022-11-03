@@ -140,6 +140,8 @@ public partial class Star : StaticBody3D
 		{
             var planetInstance = PlanetScene.Instantiate() as Planet;
 
+            GD.Print(parameters);
+
             planetInstance.Init(parameters, this);
             AddChild(planetInstance);
         }

@@ -74,7 +74,7 @@ public partial class Star : StaticBody3D
 	{
         GetNode<CSGSphere3D>("Sphere").Radius = Radius;
 
-        PlanetScene = ResourceLoader.Load("res://entities/planet/planet.tscn") as PackedScene;
+        PlanetScene = (PackedScene)ResourceLoader.Load("res://entities/planet/planet.tscn");
         
         PlanetCount = Rand.RandiRange(MIN_PLANETS, MAX_PLANETS);
         OrbitParams = new OrbitParameters[PlanetCount];
@@ -142,7 +142,7 @@ public partial class Star : StaticBody3D
 
             GD.Print(parameters);
 
-            planetInstance.Init(parameters, this);
+            planetInstance!.Init(parameters, this);
             AddChild(planetInstance);
         }
 	}

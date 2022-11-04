@@ -4,9 +4,21 @@ using System.Collections.Generic;
 public partial class LevelGenerator : Node
 {
     public List<PointOfInterestType> Types { get; set; } = new List<PointOfInterestType>();
+    public int[] TypeFrequency { get; set; } = default!;
 
     [Export]
     public float SizeMultiplier { get; set; } = 100.0f;
+
+    /// <summary>
+    /// Random number generator instance.
+    /// </summary>
+    private RandomNumberGenerator Rand { get; set; } = new RandomNumberGenerator();
+
+    public LevelGenerator()
+	{
+        // set-up random seed.
+        Rand.Randomize();
+    }
 
     /// <inheritdoc />
     public override void _Ready()
@@ -14,12 +26,15 @@ public partial class LevelGenerator : Node
         // Setting up points of interest
         int pointCount = 64;
 
-        Types.Add(new PointOfInterestType("Star", 2.0f, 4.0f));
-        Types.Add(new PointOfInterestType("SpaceStation", 10f, 40f));
-        Types.Add(new PointOfInterestType("Loot", 0.5f, 20f));
+        Types.Add(new PointOfInterestType("Star", 10.0f, 40.0f));
+        Types.Add(new PointOfInterestType("SpaceStation", 2.0f, 4.0f));
+        Types.Add(new PointOfInterestType("Loot", 1.0f, 20f));
+
+        TypeFrequency = new int[] { 8, 40, 16 };
 
         // Generate points of interest
-        List<PointOfInterest> poi = GeneratePointsOfInterest(pointCount);
+        // List<PointOfInterest> poi = GeneratePointsOfInterest(pointCount);
+        List<PointOfInterest> poi = GenerateSequentialPointsOfInterest();
 
         // Visualise points of interest
         Node3D container = GetNode<Node3D>("../Container");
@@ -37,43 +52,19 @@ public partial class LevelGenerator : Node
     private List<PointOfInterest> GeneratePointsOfInterest(int pointCount)
     {
         List<PointOfInterest> points = new List<PointOfInterest>();
-
-        var rng = new RandomNumberGenerator();
-        rng.Randomize();
-
+        
         int numGenerated = 0;
 
         while (numGenerated < pointCount)
         {
-            float radius = SizeMultiplier * Mathf.Sqrt(rng.Randf());
-            float angle = Mathf.Tau * rng.Randf();
+            // Randomly determine position and POI type.
+            Vector2 position = GeneratePointOnCircleWithRadius(SizeMultiplier);
+            var randomType = Types[Rand.RandiRange(0, Types.Count - 1)];
 
-            float x = radius * Mathf.Cos(angle);
-            float y = radius * Mathf.Sin(angle);
-            
-            Vector2 position = new Vector2(x, y);
-
-            var randomType = Types[rng.RandiRange(0, Types.Count - 1)];
             PointOfInterest point = new PointOfInterest(position, randomType);
-
-            bool isValid = true;
-
-            for (int i = 0; i < numGenerated; i++)
-            {
-                var p = points[i];
-                bool isOverlapping = point.IsOverlappingWith(p);
-
-                bool isInsideDeadzone = false;
-
-                if (p.Type.Id == point.Type.Id)
-                    isInsideDeadzone = point.IsInsideDeadzoneOf(p);
-
-                if (isOverlapping || isInsideDeadzone)
-                {
-                    isValid = false;
-                    break;
-                }
-            }
+                
+            // Compare position with other POIs to determine its validity.
+            bool isValid = IsValidPointOfInterest(point, points.GetRange(0, numGenerated));
 
             if (isValid)
             {
@@ -83,5 +74,95 @@ public partial class LevelGenerator : Node
         }
 
         return points;
+    }
+
+    private List<PointOfInterest> GenerateSequentialPointsOfInterest()
+    {
+        List<PointOfInterest> points = new List<PointOfInterest>();
+
+        int numGenerated = 0;
+        
+        int numTypesGenerated = 0;
+        int typeCount = TypeFrequency.Length;
+
+        while (numTypesGenerated < typeCount)
+        {
+            int numType = 0;
+            int maxType = TypeFrequency[numTypesGenerated];
+
+            while (numType < maxType)
+            {
+                // Randomly determine position and POI type.
+                float maxRadius = SizeMultiplier;
+
+                if (numTypesGenerated > 0)
+                    maxRadius *= 1.4f;
+
+                Vector2 position = GeneratePointOnCircleWithRadius(maxRadius);
+                PointOfInterestType type = Types[numTypesGenerated];
+
+                PointOfInterest point = new PointOfInterest(position, type);
+
+                // Compare position with other POIs to determine its validity.
+                bool isValid = IsValidPointOfInterest(point, points);
+
+                if (isValid)
+                {
+                    points.Add(point);
+                    numGenerated++;
+                    numType++;
+                }
+            }
+
+            numTypesGenerated++;
+        }
+
+        return points;
+    }
+
+    private Vector2 GeneratePointOnCircleWithRadius(float maxRadius)
+    {
+        float radius = maxRadius * Mathf.Sqrt(Rand.Randf());
+        float angle = Mathf.Tau * Rand.Randf();
+
+        float x = radius * Mathf.Cos(angle);
+        float y = radius * Mathf.Sin(angle);
+        
+        Vector2 position = new Vector2(x, y);
+
+        return position;
+    }
+
+    private Vector2 GeneratePointOnUnitSquare()
+    {
+        float x = Rand.Randf();
+        float y = Rand.Randf();
+        
+        Vector2 position = new Vector2(x, y);
+
+        return position;
+    }
+
+    private bool IsValidPointOfInterest(PointOfInterest point, List<PointOfInterest> points)
+    {
+        bool isValid = true;
+
+        foreach(PointOfInterest p in points)
+        {
+            bool isOverlapping = point.IsOverlappingWith(p);
+
+            bool isInsideDeadzone = false;
+
+            if (p.Type.Id == point.Type.Id)
+                isInsideDeadzone = point.IsInsideDeadzoneOf(p);
+
+            if (isOverlapping || isInsideDeadzone)
+            {
+                isValid = false;
+                break;
+            }
+        }
+
+        return isValid;
     }
 }

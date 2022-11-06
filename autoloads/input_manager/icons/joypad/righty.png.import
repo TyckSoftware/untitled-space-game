@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f1nw3lqew4t5"
-path="res://.godot/imported/slash.png-26619af1cdf14804e5640596e97d8d68.ctex"
+uid="uid://d1arqhmdiig3q"
+path="res://.godot/imported/righty.png-fd4daca73233ab1467b31667a69bc975.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://autoloads/input_manager/icons/keyboard/slash.png"
-dest_files=["res://.godot/imported/slash.png-26619af1cdf14804e5640596e97d8d68.ctex"]
+source_file="res://autoloads/input_manager/icons/joypad/righty.png"
+dest_files=["res://.godot/imported/righty.png-fd4daca73233ab1467b31667a69bc975.ctex"]
 
 [params]
 

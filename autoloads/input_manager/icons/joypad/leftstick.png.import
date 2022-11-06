@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f1nw3lqew4t5"
-path="res://.godot/imported/slash.png-26619af1cdf14804e5640596e97d8d68.ctex"
+uid="uid://d3k4x1kg0gtcv"
+path="res://.godot/imported/leftstick.png-bf31544d2f232372c47ecb3a202b8fcb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://autoloads/input_manager/icons/keyboard/slash.png"
-dest_files=["res://.godot/imported/slash.png-26619af1cdf14804e5640596e97d8d68.ctex"]
+source_file="res://autoloads/input_manager/icons/joypad/leftstick.png"
+dest_files=["res://.godot/imported/leftstick.png-bf31544d2f232372c47ecb3a202b8fcb.ctex"]
 
 [params]
 

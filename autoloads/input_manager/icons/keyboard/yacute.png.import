@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f1nw3lqew4t5"
-path="res://.godot/imported/slash.png-26619af1cdf14804e5640596e97d8d68.ctex"
+uid="uid://b123jayd2c30c"
+path="res://.godot/imported/yacute.png-77bbd5c19ad79846a9b47daaafce9862.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://autoloads/input_manager/icons/keyboard/slash.png"
-dest_files=["res://.godot/imported/slash.png-26619af1cdf14804e5640596e97d8d68.ctex"]
+source_file="res://autoloads/input_manager/icons/keyboard/yacute.png"
+dest_files=["res://.godot/imported/yacute.png-77bbd5c19ad79846a9b47daaafce9862.ctex"]
 
 [params]
 

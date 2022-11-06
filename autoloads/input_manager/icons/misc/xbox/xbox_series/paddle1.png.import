@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f1nw3lqew4t5"
-path="res://.godot/imported/slash.png-26619af1cdf14804e5640596e97d8d68.ctex"
+uid="uid://b78ufbhwbumhs"
+path="res://.godot/imported/paddle1.png-b2b94ed76f9e0ced5078a1eb98a8fb5a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://autoloads/input_manager/icons/keyboard/slash.png"
-dest_files=["res://.godot/imported/slash.png-26619af1cdf14804e5640596e97d8d68.ctex"]
+source_file="res://autoloads/input_manager/icons/misc/xbox/xbox_series/paddle1.png"
+dest_files=["res://.godot/imported/paddle1.png-b2b94ed76f9e0ced5078a1eb98a8fb5a.ctex"]
 
 [params]
 

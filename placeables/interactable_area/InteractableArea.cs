@@ -26,9 +26,9 @@ public partial class InteractableArea : Area3D
         = new InteractableAreaInteraction[0];
 
     /// <summary>
-    /// The interaction hints that are currently being displayed.
+    /// The interaction hints that are currently being rendered.
     /// </summary>
-    private IList<Label> Labels { get; set; } = new List<Label>();
+    private IList<CanvasItem> RenderedInteractions { get; set; } = new List<CanvasItem>();
 
     /// <summary>
     /// The input manager used to determine the
@@ -147,26 +147,35 @@ public partial class InteractableArea : Area3D
 
         switch (InputManager.LatestInputEvent)
         {
-            // Joypad
-            case InputEventJoypadButton:
-            case InputEventJoypadMotion:
-                inputEvent = inputEvents.FirstOrDefault(ie => ie is InputEventJoypadButton or InputEventJoypadMotion);
-                break;
             // Keyboard + Mouse
             case InputEventKey:
             case InputEventMouse:
-                inputEvent = inputEvents.FirstOrDefault(ie => ie is InputEventKey or InputEventMouseButton);
+                inputEvent = inputEvents
+                    .FirstOrDefault(ie => ie is InputEventKey or InputEventMouseButton);
+                break;
+            // Joypad
+            case InputEventJoypadButton:
+            case InputEventJoypadMotion:
+                inputEvent = inputEvents
+                    .FirstOrDefault(ie => ie is InputEventJoypadButton or InputEventJoypadMotion);
                 break;
         }
 
-        string keyName = inputEvent != null ? inputEvent.AsText() : "UNBOUND";
+        // Get the icon for the input event.
+        Image? inputIcon = inputEvent != null
+                    ? InputManager.GetInputIcon(inputEvent)
+                    : null;
 
-        // Create a label with the interaction hint.
-        Label label = new Label();
-        label.Text = $"Press {keyName} to {interactableAreaInteraction.ActionDisplayText}";
-        Labels.Add(label);
+        // Create the interaction hint label.
+        Container interactionHintLabel = GetInteractionHintLabel(
+            interactableAreaInteraction.ActionDisplayText,
+            inputEvent,
+            inputIcon
+        );
 
-        InteractionHintsUIContainer.AddChild(label);
+        // Render the interaction hint label.
+        InteractionHintsUIContainer.AddChild(interactionHintLabel);
+        RenderedInteractions.Add(interactionHintLabel);
     }
 
     /// <summary>
@@ -174,11 +183,77 @@ public partial class InteractableArea : Area3D
     /// </summary>
     private void ClearInteractionHints()
     {
-        foreach (Label label in Labels)
+        foreach (CanvasItem renderedInteraction in RenderedInteractions)
         {
-            InteractionHintsUIContainer.RemoveChild(label);
+            InteractionHintsUIContainer.RemoveChild(renderedInteraction);
         }
 
-        Labels.Clear();
+        RenderedInteractions.Clear();
+    }
+
+    /// <summary>
+    /// Gets the interaction hint label for the given interaction.
+    /// </summary>
+    /// <param name="actionText">
+    /// The text that is displayed in the label
+    /// describing the action upon activation.
+    /// </param>
+    /// <param name="inputEvent">
+    /// The input event that is used to activate
+    /// the interaction.
+    /// </param>
+    /// <param name="inputIcon">
+    /// The icon that is displayed in the label.
+    /// </param>
+    /// <returns></returns>
+    private Container GetInteractionHintLabel(
+        string actionText, InputEvent? inputEvent, Image? inputIcon)
+    {
+        HBoxContainer hBoxContainer = new();
+
+        // Create a texture rect for the input icon.
+        if (inputIcon != null)
+        {
+            ImageTexture imageTexture = ImageTexture
+                .CreateFromImage(inputIcon);
+
+            TextureRect textureRect = new()
+            {
+                Texture = imageTexture,
+                IgnoreTextureSize = true,
+                StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
+                CustomMinimumSize = new Vector2i(40, 0)
+            };
+
+            hBoxContainer.AddChild(textureRect);
+        }
+
+        // Create a label with the interaction hint.
+        string preMessage = string.Empty;
+
+        if (inputEvent == null)
+        {
+            preMessage = "UNBOUND ";
+        }
+        else if (inputIcon == null)
+        {
+            preMessage = "MISSING ICON ";
+        }
+
+        Label label = new Label()
+        {
+            VerticalAlignment = VerticalAlignment.Center,
+            Text = $"{preMessage}to {actionText}",
+            LabelSettings = new()
+            {
+                FontSize = 24,
+                OutlineSize = 3,
+                OutlineColor = Colors.Black
+            }
+        };
+
+        hBoxContainer.AddChild(label);
+
+        return hBoxContainer;
     }
 }

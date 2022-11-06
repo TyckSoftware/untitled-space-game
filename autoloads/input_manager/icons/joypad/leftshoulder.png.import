@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f1nw3lqew4t5"
-path="res://.godot/imported/slash.png-26619af1cdf14804e5640596e97d8d68.ctex"
+uid="uid://d4irsm26hhs7j"
+path="res://.godot/imported/leftshoulder.png-ae5d3bb2a61433ac5d2911c542f1397a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://autoloads/input_manager/icons/keyboard/slash.png"
-dest_files=["res://.godot/imported/slash.png-26619af1cdf14804e5640596e97d8d68.ctex"]
+source_file="res://autoloads/input_manager/icons/joypad/leftshoulder.png"
+dest_files=["res://.godot/imported/leftshoulder.png-ae5d3bb2a61433ac5d2911c542f1397a.ctex"]
 
 [params]
 

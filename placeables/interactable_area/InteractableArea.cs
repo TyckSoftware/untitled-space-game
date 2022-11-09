@@ -28,7 +28,8 @@ public partial class InteractableArea : Area3D
     /// <summary>
     /// The interaction hints that are currently being rendered.
     /// </summary>
-    private IList<CanvasItem> RenderedInteractions { get; set; } = new List<CanvasItem>();
+    private IList<CanvasItem> RenderedInteractions { get; set; }
+        = new List<CanvasItem>();
 
     /// <summary>
     /// The input manager used to determine the

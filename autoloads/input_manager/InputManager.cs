@@ -84,7 +84,6 @@ public partial class InputManager : Node
             && !JoypadInputEventTypes.Contains(latestInputEventType)
             )
         {
-            // GD.Print("(InputManager) Input device changed.");
             EmitSignal(SignalName.InputDeviceChanged, inputEvent);
         }
     }

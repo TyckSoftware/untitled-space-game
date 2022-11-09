@@ -5,8 +5,12 @@ using Godot;
 /// </summary>
 /// <param name="Id">Point of interest identifier</param>
 /// <param name="Size">Radius encompassing the point of interest.</param>
+/// <param name="ClumpingFactor">Radius multiplier dictating how close to the center on a circle the POI can spawn.</param>
 /// <param name="Deadzone">Radius in which no POI of the same type can spawn.</param>
-public record PointOfInterestType(string Id, float Size, float Deadzone);
+public record PointOfInterestType(string Id, float Size, float Deadzone, float ClumpingFactor, int Weight)
+{
+    public float ModifiedWeight => Weight * Mathf.Pow(Size, 0.8f);
+}
 
 public class PointOfInterest
 {

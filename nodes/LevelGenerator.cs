@@ -26,14 +26,22 @@ public partial class LevelGenerator : Node
         // Setting up points of interest
         int pointCount = 64;
 
-        Types.Add(new PointOfInterestType("Star", 10.0f, 40.0f));
-        Types.Add(new PointOfInterestType("SpaceStation", 2.0f, 4.0f));
-        Types.Add(new PointOfInterestType("Loot", 1.0f, 20f));
+        Types.Add(new PointOfInterestType("Star", 10f, 40.0f, 1.0f, 10));
+        Types.Add(new PointOfInterestType("Loot", 1.0f, 20f, 1.5f, 30));
+        Types.Add(new PointOfInterestType("SpaceStation", 2.0f, 4.0f, 1.4f, 50));
+
+        // Types.Sort((x, y) => x.ModifiedWeight.CompareTo(y.ModifiedWeight)); // Only when generating w/ GenerateWeightedPointsOfInterest
+
+        foreach (var t in Types)
+        {
+            GD.Print(t.ModifiedWeight);
+        }
 
         TypeFrequency = new int[] { 8, 40, 16 };
 
         // Generate points of interest
         // List<PointOfInterest> poi = GeneratePointsOfInterest(pointCount);
+        // List<PointOfInterest> poi = GenerateWeightedPointsOfInterest(pointCount);
         List<PointOfInterest> poi = GenerateSequentialPointsOfInterest();
 
         // Visualise points of interest
@@ -64,7 +72,56 @@ public partial class LevelGenerator : Node
             PointOfInterest point = new PointOfInterest(position, randomType);
                 
             // Compare position with other POIs to determine its validity.
-            bool isValid = IsValidPointOfInterest(point, points.GetRange(0, numGenerated));
+            bool isValid = IsValidPointOfInterest(point, points);
+
+            if (isValid)
+            {
+                points.Add(point);
+                numGenerated++;
+            }
+        }
+
+        return points;
+    }
+
+    private List<PointOfInterest> GenerateWeightedPointsOfInterest(int pointCount)
+    {
+        List<PointOfInterest> points = new List<PointOfInterest>();
+
+        float totalWeight = 0.0f;
+
+        foreach (PointOfInterestType t in Types)
+        {
+            totalWeight += t.ModifiedWeight;
+        }
+
+        int numGenerated = 0;
+
+        while (numGenerated < pointCount)
+        {
+            // Randomly determine the POI type.
+
+            float randomWeight = Rand.RandfRange(0, totalWeight);
+            float cumulativeWeight = 0.0f;
+
+            PointOfInterestType type = default!;
+
+            foreach (PointOfInterestType t in Types) 
+            {
+                cumulativeWeight += t.ModifiedWeight;
+                
+                if (randomWeight <= cumulativeWeight)
+                    type = t;
+            }
+
+            // Randomly POI position.
+            float maxRadius = SizeMultiplier * type.ClumpingFactor;
+            Vector2 position = GeneratePointOnCircleWithRadius(maxRadius);
+
+            PointOfInterest point = new PointOfInterest(position, type);
+
+            // Compare position with other POIs to determine its validity.
+            bool isValid = IsValidPointOfInterest(point, points);
 
             if (isValid)
             {

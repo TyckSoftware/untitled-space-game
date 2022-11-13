@@ -1,0 +1,6 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://c6y62hwpxqshu"]
+
+[ext_resource type="Script" path="res://entities/spaceship/interactions/SpaceshipCockpitCollisionInteraction.cs" id="1_2nib0"]
+
+[resource]
+script = ExtResource("1_2nib0")

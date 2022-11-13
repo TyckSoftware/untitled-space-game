@@ -4,8 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://c730xw6nphqy0" path="res://entities/star/star.tscn" id="1_wowe5"]
 [ext_resource type="PackedScene" uid="uid://0jgy8lg6e1sj" path="res://entities/player/player.tscn" id="2_wg1ye"]
 [ext_resource type="PackedScene" uid="uid://d2x8rwpfc3k0s" path="res://placeables/interactable_area/interactable_area.tscn" id="3_mfjsb"]
-[ext_resource type="Resource" uid="uid://vt3k4wnnw20e" path="res://placeables/interactable_area/interactable_area_interaction.tres" id="4_x4gjs"]
-[ext_resource type="Resource" uid="uid://dcqk1ra0c766x" path="res://entities/spaceship/interactions/spaceship-drive-interaction.tres" id="5_75xhl"]
+[ext_resource type="Resource" uid="uid://cj1qu5co82yym" path="res://entities/spaceship/interactions/spaceship-drive-key-interaction.tres" id="5_a5wi6"]
+[ext_resource type="Resource" uid="uid://c6y62hwpxqshu" path="res://entities/spaceship/interactions/spaceship-cockpit-collision-interaction.tres" id="6_tp5o2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vseue"]
 
@@ -23,7 +23,7 @@ motion_mode = 1
 [node name="InteractableArea" parent="Spaceship" node_paths=PackedStringArray("InteractionHintsUIContainer") instance=ExtResource("3_mfjsb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -5.36017)
 InteractionHintsUIContainer = NodePath("../../UserInterface/InteractionHintsContainer")
-Interactions = [ExtResource("4_x4gjs"), ExtResource("5_75xhl")]
+Interactions = [ExtResource("5_a5wi6"), ExtResource("6_tp5o2")]
 
 [node name="DirectionalLight3d" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 13.2242, 0)

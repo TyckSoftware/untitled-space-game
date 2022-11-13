@@ -42,11 +42,36 @@ public partial class InteractableArea : Area3D
     /// </summary>
     private bool IsPlayerInArea { get; set; }
 
+    /// <inheritdoc />
     public override void _Ready()
     {
         InputManager = GetNode<InputManager>("/root/InputManager");
         InputManager.InputDeviceChanged +=
             inputEvent => OnInputDeviceChanged(inputEvent);
+    }
+
+    /// <inheritdoc />
+    public override void _Process(double delta)
+    {
+        foreach (var interaction in Interactions)
+        {
+            if (interaction.IsActive)
+            {
+                interaction.Process(delta);
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public override void _PhysicsProcess(double delta)
+    {
+        foreach (var interaction in Interactions)
+        {
+            if (interaction.IsActive)
+            {
+                interaction.PhysicsProcess(delta);
+            }
+        }
     }
 
     /// <summary>
@@ -62,9 +87,16 @@ public partial class InteractableArea : Area3D
         {
             foreach (InteractableAreaInteraction interaction in Interactions)
             {
-                if (Input.IsActionJustPressed(interaction.KeyAction))
+                if (interaction is InteractableAreaKeyInteraction interactableAreaKeyInteraction)
                 {
-                    interaction.Perform();
+                    if (Input.IsActionJustPressed(interactableAreaKeyInteraction.KeyAction))
+                    {
+                        interactableAreaKeyInteraction.OnKeyPressed();
+                    }
+                    else if (Input.IsActionJustReleased(interactableAreaKeyInteraction.KeyAction))
+                    {
+                        interactableAreaKeyInteraction.OnKeyReleased();
+                    }
                 }
             }
         }
@@ -97,6 +129,8 @@ public partial class InteractableArea : Area3D
         if (body is Player)
         {
             IsPlayerInArea = true;
+
+            FireInteractableAreaBodyEnteredEvents();
             DrawInteractionHints();
         }
     }
@@ -113,7 +147,39 @@ public partial class InteractableArea : Area3D
         if (body is Player)
         {
             IsPlayerInArea = false;
+
+            FireInteractableAreaBodyExitedEvents();
             ClearInteractionHints();
+        }
+    }
+
+    /// <summary>
+    /// Fire the <see cref="InteractableAreaBodyEnteredEvent"/> events
+    /// for all the <see cref="InteractableAreaInteraction"/> interactions.
+    /// </summary>
+    private void FireInteractableAreaBodyEnteredEvents()
+    {
+        foreach (InteractableAreaInteraction interaction in Interactions)
+        {
+            if (interaction is InteractableAreaCollisionInteraction interactableAreaCollisionInteraction)
+            {
+                interactableAreaCollisionInteraction.OnEntityEntered();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Fire the <see cref="InteractableAreaCollisionInteraction.OnEntityExited"/>
+    /// event for all <see cref="InteractableAreaCollisionInteraction"/> interactions.
+    /// </summary>
+    private void FireInteractableAreaBodyExitedEvents()
+    {
+        foreach (InteractableAreaInteraction interaction in Interactions)
+        {
+            if (interaction is InteractableAreaCollisionInteraction interactableAreaCollisionInteraction)
+            {
+                interactableAreaCollisionInteraction.OnEntityExited();
+            }
         }
     }
 
@@ -124,7 +190,10 @@ public partial class InteractableArea : Area3D
     {
         foreach (InteractableAreaInteraction interaction in Interactions)
         {
-            DrawInteractionHint(interaction);
+            if (interaction is InteractableAreaKeyInteraction interactableAreaKeyInteraction)
+            {
+                DrawInteractionHint(interactableAreaKeyInteraction);
+            }
         }
     }
 
@@ -134,11 +203,11 @@ public partial class InteractableArea : Area3D
     /// <param name="interactableAreaInteraction">
     /// The interaction to draw the hint for.
     /// </param>
-    private void DrawInteractionHint(InteractableAreaInteraction interactableAreaInteraction)
+    private void DrawInteractionHint(InteractableAreaKeyInteraction interactableAreaKeyInteraction)
     {
         // Get the input events for the interaction.
         Godot.Collections.Array<InputEvent> inputEvents =
-            InputMap.ActionGetEvents(interactableAreaInteraction.KeyAction);
+            InputMap.ActionGetEvents(interactableAreaKeyInteraction.KeyAction);
 
         /*
 		 * Detmine the input event whose name is going to be displayed.
@@ -169,7 +238,7 @@ public partial class InteractableArea : Area3D
 
         // Create the interaction hint label.
         Container interactionHintLabel = GetInteractionHintLabel(
-            interactableAreaInteraction.ActionDisplayText,
+            interactableAreaKeyInteraction.ActionDisplayText,
             inputEvent,
             inputIcon
         );

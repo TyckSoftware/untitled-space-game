@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://d2x8rwpfc3k0s"]
+
+[ext_resource type="Script" path="res://placeables/interactable_area/InteractableArea.cs" id="1_kyq06"]
+
+[sub_resource type="Resource" id="Resource_d7n0q"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_mxrmx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kqsky"]
+transparency = 1
+albedo_color = Color(1, 0.4, 0.34902, 0.290196)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hpj7v"]
+material = SubResource("StandardMaterial3D_kqsky")
+
+[node name="InteractableArea" type="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 6.345)
+script = ExtResource("1_kyq06")
+Testres = SubResource("Resource_d7n0q")
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 1, 0, 0, 0, 5, 0, 0, 0)
+shape = SubResource("CylinderShape3D_mxrmx")
+
+[node name="MeshInstance3d" type="MeshInstance3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 1, 0, 0, 0, 5, 0, 0, 0)
+mesh = SubResource("CylinderMesh_hpj7v")
+
+[connection signal="body_entered" from="." to="." method="OnInteractableAreaBodyEntered"]
+[connection signal="body_exited" from="." to="." method="OnInteractableAreaBodyExited"]

@@ -87,6 +87,10 @@ spaceship_enter={
 ]
 }
 
+[layer_names]
+
+3d_physics/layer_2="Interactable Area"
+
 [physics]
 
 3d/run_on_separate_thread=true

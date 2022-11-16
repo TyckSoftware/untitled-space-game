@@ -4,3 +4,5 @@
 
 [resource]
 script = ExtResource("1_2nib0")
+Groups = PackedStringArray("player")
+metadata/_editor_prop_ptr_InteractionHintsUIContainer = NodePath("../../UserInterface/InteractionHintsContainer")

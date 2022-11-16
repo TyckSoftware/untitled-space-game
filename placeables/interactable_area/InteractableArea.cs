@@ -1,6 +1,5 @@
 using Godot;
 using System.Collections.Generic;
-using System.Linq;
 
 /// <summary>
 /// An area that can hold a collection of
@@ -35,7 +34,7 @@ public partial class InteractableArea : Area3D
     /// The input manager used to determine the
     /// input device used.
     /// </summary>
-    private InputManager InputManager { get; set; } = default!;
+    public InputManager InputManager { get; set; } = default!;
 
     /// <summary>
     /// Whether the player is currently in the area.
@@ -46,8 +45,11 @@ public partial class InteractableArea : Area3D
     public override void _Ready()
     {
         InputManager = GetNode<InputManager>("/root/InputManager");
-        InputManager.InputDeviceChanged +=
-            inputEvent => OnInputDeviceChanged(inputEvent);
+
+        foreach (InteractableAreaInteraction interaction in Interactions)
+        {
+            interaction.Initialize(this);
+        }
     }
 
     /// <inheritdoc />
@@ -55,10 +57,7 @@ public partial class InteractableArea : Area3D
     {
         foreach (var interaction in Interactions)
         {
-            if (interaction.IsActive)
-            {
-                interaction.Process(delta);
-            }
+            interaction._Process(delta);
         }
     }
 
@@ -67,263 +66,37 @@ public partial class InteractableArea : Area3D
     {
         foreach (var interaction in Interactions)
         {
-            if (interaction.IsActive)
-            {
-                interaction.PhysicsProcess(delta);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Event that is fired by Godot whenever
-    /// any key is pressed.
-    /// </summary>
-    /// <param name="inputEvent">
-    /// The input event that was made.
-    /// </param>
-    public void _input(InputEvent inputEvent)
-    {
-        if (IsPlayerInArea)
-        {
-            foreach (InteractableAreaInteraction interaction in Interactions)
-            {
-                if (interaction is InteractableAreaKeyInteraction interactableAreaKeyInteraction)
-                {
-                    if (Input.IsActionJustPressed(interactableAreaKeyInteraction.KeyAction))
-                    {
-                        interactableAreaKeyInteraction.OnKeyPressed();
-                    }
-                    else if (Input.IsActionJustReleased(interactableAreaKeyInteraction.KeyAction))
-                    {
-                        interactableAreaKeyInteraction.OnKeyReleased();
-                    }
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Method that is fired by the
-    /// <see cref="InputManager.InputDeviceChangedEventHandler"/>
-    /// whenever the input device is changed.
-    /// </summary>
-    /// <param name="inputEvent"></param>
-    private void OnInputDeviceChanged(InputEvent inputEvent)
-    {
-        if (IsPlayerInArea)
-        {
-            ClearInteractionHints();
-            DrawInteractionHints();
+            interaction._PhysicsProcess(delta);
         }
     }
 
     /// <summary>
     /// Method that is fired by Godot whenever
-    /// a Node3D enters the area.
+    /// a node enters the area.
     /// </summary>
-    /// <param name="body">
-    /// The Node3D that entered the area.
+    /// <param name="node">
+    /// The node that entered the area.
     /// </param>
-    public void OnInteractableAreaBodyEntered(Node3D body)
+    public void OnInteractableAreaBodyEntered(Node3D node)
     {
-        if (body is Player)
+        foreach (InteractableAreaInteraction interaction in Interactions)
         {
-            IsPlayerInArea = true;
-
-            FireInteractableAreaBodyEnteredEvents();
-            DrawInteractionHints();
+            interaction.OnEntityEntered(node);
         }
     }
 
     /// <summary>
     /// Method that is fired by Godot whenever
-    /// a Node3D exits the area.
+    /// a node exits the area.
     /// </summary>
-    /// <param name="body">
-    /// The Node3D that exited the area.
+    /// <param name="node">
+    /// The node that exited the area.
     /// </param>
-    public void OnInteractableAreaBodyExited(Node3D body)
-    {
-        if (body is Player)
-        {
-            IsPlayerInArea = false;
-
-            FireInteractableAreaBodyExitedEvents();
-            ClearInteractionHints();
-        }
-    }
-
-    /// <summary>
-    /// Fire the <see cref="InteractableAreaBodyEnteredEvent"/> events
-    /// for all the <see cref="InteractableAreaInteraction"/> interactions.
-    /// </summary>
-    private void FireInteractableAreaBodyEnteredEvents()
+    public void OnInteractableAreaBodyExited(Node3D node)
     {
         foreach (InteractableAreaInteraction interaction in Interactions)
         {
-            if (interaction is InteractableAreaCollisionInteraction interactableAreaCollisionInteraction)
-            {
-                interactableAreaCollisionInteraction.OnEntityEntered();
-            }
+            interaction.OnEntityExited(node);
         }
-    }
-
-    /// <summary>
-    /// Fire the <see cref="InteractableAreaCollisionInteraction.OnEntityExited"/>
-    /// event for all <see cref="InteractableAreaCollisionInteraction"/> interactions.
-    /// </summary>
-    private void FireInteractableAreaBodyExitedEvents()
-    {
-        foreach (InteractableAreaInteraction interaction in Interactions)
-        {
-            if (interaction is InteractableAreaCollisionInteraction interactableAreaCollisionInteraction)
-            {
-                interactableAreaCollisionInteraction.OnEntityExited();
-            }
-        }
-    }
-
-    /// <summary>
-    /// Draws the interaction hint for each interaction.
-    /// </summary>
-    private void DrawInteractionHints()
-    {
-        foreach (InteractableAreaInteraction interaction in Interactions)
-        {
-            if (interaction is InteractableAreaKeyInteraction interactableAreaKeyInteraction)
-            {
-                DrawInteractionHint(interactableAreaKeyInteraction);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Draws the interaction hint for the given interaction.
-    /// </summary>
-    /// <param name="interactableAreaInteraction">
-    /// The interaction to draw the hint for.
-    /// </param>
-    private void DrawInteractionHint(InteractableAreaKeyInteraction interactableAreaKeyInteraction)
-    {
-        // Get the input events for the interaction.
-        Godot.Collections.Array<InputEvent> inputEvents =
-            InputMap.ActionGetEvents(interactableAreaKeyInteraction.KeyAction);
-
-        /*
-		 * Detmine the input event whose name is going to be displayed.
-		 * This is done by checking what input device is used.
-		 */
-        InputEvent? inputEvent = null;
-
-        switch (InputManager.LatestInputEvent)
-        {
-            // Keyboard + Mouse
-            case InputEventKey:
-            case InputEventMouse:
-                inputEvent = inputEvents
-                    .FirstOrDefault(ie => ie is InputEventKey or InputEventMouseButton);
-                break;
-            // Joypad
-            case InputEventJoypadButton:
-            case InputEventJoypadMotion:
-                inputEvent = inputEvents
-                    .FirstOrDefault(ie => ie is InputEventJoypadButton or InputEventJoypadMotion);
-                break;
-        }
-
-        // Get the icon for the input event.
-        Image? inputIcon = inputEvent != null
-                    ? InputManager.GetInputIcon(inputEvent)
-                    : null;
-
-        // Create the interaction hint label.
-        Container interactionHintLabel = GetInteractionHintLabel(
-            interactableAreaKeyInteraction.ActionDisplayText,
-            inputEvent,
-            inputIcon
-        );
-
-        // Render the interaction hint label.
-        InteractionHintsUIContainer.AddChild(interactionHintLabel);
-        RenderedInteractions.Add(interactionHintLabel);
-    }
-
-    /// <summary>
-    /// Clears the interaction hint for each interaction.
-    /// </summary>
-    private void ClearInteractionHints()
-    {
-        foreach (CanvasItem renderedInteraction in RenderedInteractions)
-        {
-            InteractionHintsUIContainer.RemoveChild(renderedInteraction);
-        }
-
-        RenderedInteractions.Clear();
-    }
-
-    /// <summary>
-    /// Gets the interaction hint label for the given interaction.
-    /// </summary>
-    /// <param name="actionText">
-    /// The text that is displayed in the label
-    /// describing the action upon activation.
-    /// </param>
-    /// <param name="inputEvent">
-    /// The input event that is used to activate
-    /// the interaction.
-    /// </param>
-    /// <param name="inputIcon">
-    /// The icon that is displayed in the label.
-    /// </param>
-    /// <returns></returns>
-    private Container GetInteractionHintLabel(
-        string actionText, InputEvent? inputEvent, Image? inputIcon)
-    {
-        HBoxContainer hBoxContainer = new();
-
-        // Create a texture rect for the input icon.
-        if (inputIcon != null)
-        {
-            ImageTexture imageTexture = ImageTexture
-                .CreateFromImage(inputIcon);
-
-            TextureRect textureRect = new()
-            {
-                Texture = imageTexture,
-                IgnoreTextureSize = true,
-                StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
-                CustomMinimumSize = new Vector2i(40, 0)
-            };
-
-            hBoxContainer.AddChild(textureRect);
-        }
-
-        // Create a label with the interaction hint.
-        string preMessage = string.Empty;
-
-        if (inputEvent == null)
-        {
-            preMessage = "UNBOUND ";
-        }
-        else if (inputIcon == null)
-        {
-            preMessage = "MISSING ICON ";
-        }
-
-        Label label = new Label()
-        {
-            VerticalAlignment = VerticalAlignment.Center,
-            Text = $"{preMessage}to {actionText}",
-            LabelSettings = new()
-            {
-                FontSize = 24,
-                OutlineSize = 3,
-                OutlineColor = Colors.Black
-            }
-        };
-
-        hBoxContainer.AddChild(label);
-
-        return hBoxContainer;
     }
 }

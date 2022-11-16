@@ -18,10 +18,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 100)
 
 [node name="Player" parent="Spaceship" instance=ExtResource("2_wg1ye")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+collision_layer = 3
 motion_mode = 1
 
 [node name="InteractableArea" parent="Spaceship" node_paths=PackedStringArray("InteractionHintsUIContainer") instance=ExtResource("3_mfjsb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -5.36017)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -5.36)
+collision_mask = 2
 InteractionHintsUIContainer = NodePath("../../UserInterface/InteractionHintsContainer")
 Interactions = [ExtResource("5_a5wi6"), ExtResource("6_tp5o2")]
 

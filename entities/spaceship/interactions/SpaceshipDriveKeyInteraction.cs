@@ -7,14 +7,14 @@ using Godot;
 public partial class SpaceshipDriveKeyInteraction : InteractableAreaKeyInteraction
 {
     /// <inheritdoc />
-    public override void OnKeyPressed()
+    protected override void OnKeyPressed()
     {
         base.OnKeyPressed();
         GD.Print("OnKeyPressed (SpaceshipDriveKeyInteraction)");
     }
 
     /// <inheritdoc />
-    public override void OnKeyReleased()
+    protected override void OnKeyReleased()
     {
         base.OnKeyReleased();
         GD.Print("OnKeyReleased (SpaceshipDriveKeyInteraction)");

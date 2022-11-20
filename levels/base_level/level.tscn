@@ -1,9 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://belr4teswnhmn"]
+[gd_scene load_steps=11 format=3 uid="uid://belr4teswnhmn"]
 
 [ext_resource type="PackedScene" uid="uid://bmo8i25jowrtg" path="res://entities/spaceship/spaceship.tscn" id="1_aujxs"]
 [ext_resource type="PackedScene" uid="uid://c730xw6nphqy0" path="res://entities/star/star.tscn" id="1_wowe5"]
 [ext_resource type="PackedScene" uid="uid://0jgy8lg6e1sj" path="res://entities/player/player.tscn" id="2_wg1ye"]
 [ext_resource type="PackedScene" uid="uid://d2x8rwpfc3k0s" path="res://placeables/interactable_area/interactable_area.tscn" id="3_mfjsb"]
+[ext_resource type="Resource" uid="uid://c6y62hwpxqshu" path="res://entities/spaceship/interactions/spaceship-cockpit-collision-interaction.tres" id="5_mxdtx"]
+[ext_resource type="Resource" uid="uid://cj1qu5co82yym" path="res://entities/spaceship/interactions/spaceship-drive-key-interaction.tres" id="6_s8hqv"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_15h7q"]
 
@@ -32,6 +34,8 @@ motion_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -5.36)
 collision_mask = 2
 InteractionHintsUIContainer = NodePath("../../UserInterface/InteractionHintsContainer")
+EntityTypeNames = PackedStringArray("player")
+Interactions = [ExtResource("5_mxdtx"), ExtResource("6_s8hqv")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Spaceship/InteractableArea"]
 transform = Transform3D(5, 0, 0, 0, 1, 0, 0, 0, 5, 0, 0, 0)

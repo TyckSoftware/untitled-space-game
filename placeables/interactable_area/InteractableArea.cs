@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,12 +19,18 @@ public partial class InteractableArea : Area3D
         = default!;
 
     /// <summary>
+    /// The entities whose types can trigger the
+    /// interactable area.
+    /// </summary>
+    [Export]
+    public string[]? EntityTypeNames { get; set; }
+
+    /// <summary>
     /// The interactions that are registered in
     /// this area.
     /// </summary>
     [Export]
-    public InteractableAreaInteraction[] Interactions { get; set; }
-        = new InteractableAreaInteraction[0];
+    public InteractableAreaInteraction[]? Interactions { get; set; }
 
     /// <summary>
     /// The interaction hints that are currently being rendered.
@@ -42,7 +49,7 @@ public partial class InteractableArea : Area3D
     /// </summary>
     private CollisionShape3D? CollisionShape
         => GetChildren()
-        .FirstOrDefault((child) => child is CollisionShape3D) as CollisionShape3D;
+        .FirstOrDefault(child => child is CollisionShape3D) as CollisionShape3D;
 
     /// <summary>
     /// Whether the player is currently in the area.
@@ -54,27 +61,36 @@ public partial class InteractableArea : Area3D
     {
         InputManager = GetNode<InputManager>("/root/InputManager");
 
-        foreach (InteractableAreaInteraction interaction in Interactions)
+        if (Interactions != null)
         {
-            interaction.Initialize(this);
+            foreach (InteractableAreaInteraction interaction in Interactions)
+            {
+                interaction.Initialize(this);
+            }
         }
     }
 
     /// <inheritdoc />
     public override void _Process(double delta)
     {
-        foreach (var interaction in Interactions)
+        if (Interactions != null)
         {
-            interaction._Process(delta);
+            foreach (var interaction in Interactions)
+            {
+                interaction._Process(delta);
+            }
         }
     }
 
     /// <inheritdoc />
     public override void _PhysicsProcess(double delta)
     {
-        foreach (var interaction in Interactions)
+        if (Interactions != null)
         {
-            interaction._PhysicsProcess(delta);
+            foreach (var interaction in Interactions)
+            {
+                interaction._PhysicsProcess(delta);
+            }
         }
     }
 
@@ -87,11 +103,26 @@ public partial class InteractableArea : Area3D
     /// </param>
     public void OnInteractableAreaBodyEntered(Node3D node)
     {
-        GD.Print("works 1");
-
-        foreach (InteractableAreaInteraction interaction in Interactions)
+        if (Interactions == null)
         {
-            interaction.OnEntityEntered(node);
+            return;
+        }
+
+        // Get the name of the type of the node that entered.
+        string typeName = node.GetType().ToString().ToLower().Trim();
+
+        /*
+         * Check if any provided entity type name equals the
+         * type name of the node that has entered.
+         */
+        if (EntityTypeNames == null
+            || EntityTypeNames.Length == 0
+            || EntityTypeNames.Any(ecn => ecn.ToLower().Trim() == typeName))
+        {
+            foreach (InteractableAreaInteraction interaction in Interactions)
+            {
+                interaction.OnEntityEntered(node);
+            }
         }
     }
 
@@ -104,11 +135,26 @@ public partial class InteractableArea : Area3D
     /// </param>
     public void OnInteractableAreaBodyExited(Node3D node)
     {
-        GD.Print("works 2");
-
-        foreach (InteractableAreaInteraction interaction in Interactions)
+        if (Interactions == null)
         {
-            interaction.OnEntityExited(node);
+            return;
+        }
+
+        // Get the name of the type of the node that entered.
+        string className = node.GetType().ToString().ToLower().Trim();
+
+        /*
+         * Check if any provided entity type name equals the
+         * type name of the node that has entered.
+         */
+        if (EntityTypeNames == null
+            || EntityTypeNames.Length == 0
+            || EntityTypeNames.Any(ecn => ecn.ToLower().Trim() == className))
+        {
+            foreach (InteractableAreaInteraction interaction in Interactions)
+            {
+                interaction.OnEntityExited(node);
+            }
         }
     }
 }

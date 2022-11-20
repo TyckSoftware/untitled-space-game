@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// An area that can hold a collection of
@@ -35,6 +36,13 @@ public partial class InteractableArea : Area3D
     /// input device used.
     /// </summary>
     public InputManager InputManager { get; set; } = default!;
+
+    /// <summary>
+    /// The collision shape for this interactable area.
+    /// </summary>
+    private CollisionShape3D? CollisionShape
+        => GetChildren()
+        .FirstOrDefault((child) => child is CollisionShape3D) as CollisionShape3D;
 
     /// <summary>
     /// Whether the player is currently in the area.
@@ -79,6 +87,8 @@ public partial class InteractableArea : Area3D
     /// </param>
     public void OnInteractableAreaBodyEntered(Node3D node)
     {
+        GD.Print("works 1");
+
         foreach (InteractableAreaInteraction interaction in Interactions)
         {
             interaction.OnEntityEntered(node);
@@ -94,6 +104,8 @@ public partial class InteractableArea : Area3D
     /// </param>
     public void OnInteractableAreaBodyExited(Node3D node)
     {
+        GD.Print("works 2");
+
         foreach (InteractableAreaInteraction interaction in Interactions)
         {
             interaction.OnEntityExited(node);
